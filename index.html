@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Web3 Portfolio</title>
+  <title>Wallet Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no">
   <style>
     body {
@@ -102,7 +102,8 @@
       box-shadow: 0 4px 30px 0 rgba(0,0,0,0.20);
       position: relative;
       overflow: hidden;
-      background: url('IMG_1099.jpeg') center center/cover no-repeat;
+      /* background: url('IMG_1099.jpeg') center center/cover no-repeat; */
+      background: url('IMG_0162.jpeg') center center/cover no-repeat;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -344,6 +345,7 @@
       max-width: 600px;
       margin: 38px auto 0 auto;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       border-radius: 14px;
@@ -359,6 +361,14 @@
       object-fit: contain;
       display: block;
       background: #181818;
+    }
+    .bottom-image-section .bottom-caption {
+      margin-top: 14px;
+      color: #f5c339;
+      font-size: 1.12rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 1px;
     }
     @media (max-width: 650px) {
       .bottom-image-section img {
@@ -376,15 +386,15 @@
   <div class="main-wrap">
     <!-- Small Portfolio Card at the Top -->
     <div class="small-portfolio-card">
-      <img class="portfolio-photo" src="IMG_1100.jpeg" alt="User Photo" />
+      <img class="portfolio-photo" src="IMG_0146.jpeg" alt="User Photo" />
       <table class="portfolio-mini-table">
         <tr>
           <td class="label">Registered ID</td>
-          <td class="value">( Gad Gadot )</td>
+          <td class="value">Gad Gadot</td>
         </tr>
         <tr>
           <td class="label">Referral Code</td>
-          <td class="value">( Yesira )</td>
+          <td class="value">Yesira</td>
         </tr>
       </table>
     </div>
@@ -393,7 +403,7 @@
       <div class="portfolio-overlay"></div>
       <div class="portfolio-content">
         <div class="portfolio-title">Portfolio Balance</div>
-        <div id="portfolio-balance-amount" class="portfolio-balance">$100,487</div>
+        <div id="portfolio-balance-amount" class="portfolio-balance">$20</div>
         <div class="wallet-buttons">
           <button class="wallet-btn" id="startup-btn">Start up</button>
           <button class="wallet-btn withdraw" id="withdraw-btn">Withdrawal</button>
@@ -402,7 +412,7 @@
     </div>
     <!-- GIF Section -->
     <div class="gif-section">
-      <img src="IMG_0898.gif" alt="Wallet Overview" />
+      <img src="IMG_0149.gif" alt="Wallet Overview" />
     </div>
     <!-- Token Table Section -->
     <div class="token-table-section">
@@ -417,35 +427,36 @@
         <tbody>
           <tr>
             <td>USDT</td>
-            <td>$40,000</td>
+            <td>$1899.00</td>
             <td>$1.00</td>
           </tr>
           <tr>
             <td>BTC</td>
-            <td>$13,500</td>
-            <td>$104,131.08</td>
+            <td>$0.00</td>
+            <td>$68,000</td>
           </tr>
           <tr>
             <td>SOLANA</td>
-            <td>$6,987</td>
-            <td>$157.06</td>
+            <td>$0.00</td>
+            <td>$160</td>
           </tr>
           <tr>
             <td>BNB</td>
-            <td>$10,00</td>
+            <td>$0.00</td>
             <td>$600</td>
           </tr>
           <tr>
             <td>ETH</td>
-            <td>$20,000</td>
-            <td>$2,533.35</td>
+            <td>$0.00</td>
+            <td>$3,800</td>
           </tr>
         </tbody>
       </table>
     </div>
     <!-- Bottom image section (the image you want displayed at the last part of the page) -->
     <div class="bottom-image-section">
-      <img src="IMG_1099.jpeg" alt="Bottom Section Image" />
+      <img src="IMG_0162.jpeg" alt="All Right Serve" />
+      <div class="bottom-caption">all right serve</div>
     </div>
   </div>
   <!-- Start Up Modal -->
@@ -453,7 +464,7 @@
     <div class="deposit-card">
       <img src="IMG_1089.jpeg" alt="Deposit Wallet">
       <div class="deposit-desc">Start up your wallet and access referral balance.</div>
-      <div class="error-desc">Access your referral balance now. <b>Minimum to activate: $4000 USDT</b> [ TAFpmstXRzCTPoZrsU81QysV7ZHCdnMEBF ]</div>
+      <div class="error-desc">Access your referral balance now. <b>Minimum to activate: $70 USDT</b> [ TAFpmstXRzCTPoZrsU81QysV7ZHCdnMEBF ]</div>
       <button class="deposit-close" id="startup-close">Close</button>
     </div>
   </div>
@@ -469,7 +480,7 @@
     </div>
   </div>
   <script>
-    document.getElementById('portfolio-balance-amount').textContent = '$100,487';
+    document.getElementById('portfolio-balance-amount').textContent = '$1900';
     const startupBtn = document.getElementById('startup-btn');
     const withdrawBtn = document.getElementById('withdraw-btn');
     const startupModal = document.getElementById('startup-modal');
