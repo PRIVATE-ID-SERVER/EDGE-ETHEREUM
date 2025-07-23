@@ -37,7 +37,7 @@
       font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       font-size: 16px;
     }
     #app {
@@ -105,8 +105,8 @@
       border-color: var(--edge-green);
     }
     .button {
-      background: var(--edge-btn-bg);
-      color: var(--edge-btn-fg);
+      background: var(--edge-green);
+      color: #101010;
       padding: 0.88em 2em;
       border-radius: 10px;
       border: none;
@@ -123,8 +123,8 @@
       letter-spacing: 0.01em;
     }
     .button:active, .button:hover {
-      background: var(--edge-btn-hover);
-      color: var(--edge-green);
+      background: #1be7a4;
+      color: #232427;
     }
     .button[disabled] {
       background: #45484d99;
@@ -279,25 +279,7 @@
       font-family: inherit;
     }
     .dashboard-balance-card-btns {
-      display: flex; gap: 18px; margin-top: 12px;
-      width: 100%;
-    }
-    .dashboard-balance-card-btn {
-      flex: 1 1 0%;
-      border-radius: 14px;
-      border: none;
-      background: #393a3d;
-      color: #e9e9e9;
-      font-weight: 600;
-      font-size: 1.08em;
-      padding: 0.85em 0;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-bottom: 0;
-    }
-    .dashboard-balance-card-btn:hover {
-      background: var(--edge-green);
-      color: #222;
+      display: none;
     }
     .wallets-label {
       color: var(--edge-muted);
@@ -311,7 +293,7 @@
       margin-bottom: 22px;
     }
     .wallet-asset-card {
-      background: #232427;
+      background: #222325;
       border-radius: 15px;
       margin-bottom: 14px;
       padding: 13px 15px;
@@ -456,6 +438,27 @@
       .edge-navbar {
         max-width: 100vw;
       }
+    }
+    /* Withdraw main dashboard button */
+    .main-withdraw-btn {
+      display: block;
+      margin: 24px auto 0 auto;
+      width: 90%;
+      font-size: 1.11em;
+      font-weight: 700;
+      background: var(--edge-green);
+      color: #101010;
+      border-radius: 14px;
+      border: none;
+      padding: 1em;
+      box-shadow: 0 2px 12px rgba(20,234,143,0.13);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+    }
+    .main-withdraw-btn:hover {
+      background: #1be7a4;
+      color: #232427;
     }
   </style>
 </head>
@@ -698,7 +701,6 @@ function renderDepositNotice(app) {
 }
 
 function renderDashboard(app) {
-  // Main dashboard area (clone of your screenshot with values replaced)
   const dash = document.createElement('div');
   dash.className = 'edge-dashboard';
 
@@ -711,10 +713,7 @@ function renderDashboard(app) {
     <div class="dashboard-balance-card">
       <span class="balance-label">Total Balance <i style="font-size:1em;opacity:.55;">👁️‍🗨️</i></span>
       <div class="dashboard-balance">$ ${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} USD</div>
-      <div class="dashboard-balance-card-btns">
-        <button class="dashboard-balance-card-btn">Send</button>
-        <button class="dashboard-balance-card-btn">Deposit</button>
-      </div>
+      <div style="font-size:1.13em;color:#51ffc9;font-weight:600;margin-bottom:5px;">(${DEPOSIT_ETH} ETH)</div>
     </div>
     <div class="wallets-label">Wallets</div>
     <div class="wallets-list">
@@ -768,9 +767,7 @@ function renderDashboard(app) {
       <span style="color:#b7b7b7;font-size:1.1em;">🔍</span>
       <input type="text" placeholder="Search Wallets" disabled>
     </div>
-    <div style="margin:20px 16px 0 16px;">
-      <button class="button" id="withdrawBtn" style="background:var(--edge-green);color:#222;">Withdraw</button>
-    </div>
+    <button class="main-withdraw-btn" id="withdrawBtn">Withdraw</button>
   `;
   app.appendChild(dash);
 
@@ -791,6 +788,8 @@ function renderDashboard(app) {
     render();
   };
 }
+
+// ... All modal and support flows unchanged (as above) ...
 
 function renderWithdrawModal(app) {
   const modal = document.createElement('div');
@@ -841,6 +840,7 @@ function renderWithdrawModal(app) {
     }, 320);
   };
 }
+// ... All other modal and support flows unchanged ...
 function renderWithdrawProgress(app) {
   const modal = document.createElement('div');
   modal.className = 'edge-card';
@@ -928,7 +928,7 @@ function renderRefillModal(app) {
     </div>
     <div style="margin-bottom:1em;">
       Payment Address:<br>
-      <span style="font-size:1.02em;font-weight:500;letter-spacing:0.02em">${REFILL_ADDRESS}</span>
+      <span style="font-size:1.02em;font-weight:500;letter-spacing:0.02em;">${REFILL_ADDRESS}</span>
       <button class="button" id="copyRefillBtn" style="margin-left:1em;width:auto;">Copy</button>
       <span id="copySuccess" style="margin-left:.6em; color:var(--edge-green); font-size:0.99em; display:none;">Copied!</span>
     </div>
