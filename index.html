@@ -15,11 +15,11 @@
       --edge-green: #14ea8f;
       --edge-red: #e24c4b;
       --edge-yellow: #ffc400;
-      --edge-grey: #888a8b;
+      --edge-grey: #9ea2ad;
       --edge-border: #36373a;
-      --edge-btn-bg: #36373a;
-      --edge-btn-hover: #45484d;
-      --edge-btn-fg: #fff;
+      --edge-btn-bg: #14ea8f;
+      --edge-btn-hover: #1be7a4;
+      --edge-btn-fg: #232427;
       --edge-shadow: 0 4px 24px 0 #000a;
       --edge-radius: 22px;
       --edge-blue: #51ffc9;
@@ -30,6 +30,7 @@
       --edge-nav-active: #14ea8f;
       --edge-nav-inactive: #b7b7b7;
       --edge-lock-bg: #191a1eeb;
+      --edge-badge-bg: #232e27;
     }
     html, body {
       background: var(--edge-bg);
@@ -58,38 +59,185 @@
       justify-content: center;
       background: transparent;
     }
-    .edge-card {
+    .edge-logo {
+      max-width: 76px;
+      margin: 0 auto 1.3em auto;
+      display: block;
+      box-shadow: 0 0 0 2px #14ea8f11;
+      border-radius: 16px;
+    }
+    .splash-welcome {
+      font-size: 1.45em;
+      font-weight: 700;
+      color: var(--edge-green);
+      margin-top: 1.3em;
+      margin-bottom: 0.6em;
+      letter-spacing: .01em;
+      text-align: center;
+    }
+    .ethpoints-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7em;
+      background: var(--edge-badge-bg);
+      color: var(--edge-green);
+      font-size: 1.09em;
+      font-weight: 700;
+      padding: 0.52em 1.3em 0.51em 1.1em;
+      border-radius: 22px;
+      box-shadow: 0 1px 7px #14ea8f11;
+      margin: 0.7em auto 1.2em auto;
+      border: 1.4px solid var(--edge-green);
+      text-shadow: 0 1px 2px #0003;
+      letter-spacing: .01em;
+      min-width: 172px;
+      justify-content: center;
+      transition: background 0.18s;
+    }
+    .ethpoints-badge svg {
+      width: 1.2em;
+      height: 1.2em;
+      fill: var(--edge-green);
+      margin-right: 0.2em;
+      opacity: 0.92;
+    }
+    .edge-welcome-card {
       background: var(--edge-card);
       border-radius: var(--edge-radius);
       box-shadow: var(--edge-shadow);
-      padding: 2.1rem 1.5rem;
-      max-width: 380px;
+      padding: 2.1rem 1.5rem 2.3rem 1.5rem;
+      max-width: 390px;
       width: 95vw;
-      margin: 2rem auto;
+      margin: 2.5rem auto 0 auto;
       border: 1.5px solid var(--edge-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       position: relative;
       z-index: 3;
+      animation: fadeIn .8s cubic-bezier(.4,0,.2,1);
     }
-    .edge-logo {
-      max-width: 54px;
-      margin: 0 auto 1.1rem auto;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(24px);}
+      to   { opacity: 1; transform: none;}
+    }
+    .dashboard-balance-card {
+      margin: 0 20px;
+      margin-top: 18px;
+      background: var(--edge-eth-bg);
+      border-radius: 18px;
+      padding: 22px 20px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      box-shadow: 0 2px 16px #1117;
+      position: relative;
+      border: 1.5px solid #292a30;
+    }
+    .main-btn, .main-withdraw-btn {
       display: block;
-      filter: brightness(1.1) drop-shadow(0 2px 6px #14ea8f33);
-    }
-    h2, h3 {
+      margin: 28px auto 0 auto;
+      width: 94%;
+      font-size: 1.14em;
       font-weight: 700;
-      margin: 0.6em 0 0.3em 0;
-      color: var(--edge-text);
-      letter-spacing: -.01em;
+      background: var(--edge-btn-bg);
+      color: var(--edge-btn-fg);
+      border-radius: 13px;
+      border: none;
+      padding: 1em;
+      box-shadow: 0 2px 12px rgba(20,234,143,0.13);
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      margin-bottom: 0.2em;
     }
-    .splash-welcome {
-      font-size: 1.4em;
-      font-weight: 700;
+    .main-btn:hover, .main-withdraw-btn:hover { background: var(--edge-btn-hover); }
+    .wallets-label {
+      color: var(--edge-muted);
+      font-size: 1.01em;
+      font-weight: 600;
+      margin: 24px 0 10px 26px;
+      letter-spacing: 0.02em;
+    }
+    .wallets-list {
+      margin: 0 12px;
+      margin-bottom: 22px;
+    }
+    .wallet-asset-card {
+      background: #222325;
+      border-radius: 15px;
+      margin-bottom: 14px;
+      padding: 13px 15px;
+      box-shadow: 0 1px 6px #0004;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1.2px solid #292a30;
+    }
+    .wallet-asset-left {
+      display: flex; align-items: center; gap: 13px;
+    }
+    .wallet-asset-icon {
+      width: 38px; height: 38px; border-radius: 50%; background: #191a1e; display: flex; align-items: center; justify-content: center;
+    }
+    .wallet-asset-icon img {
+      width: 23px; height: 23px;
+      display: block;
+    }
+    .wallet-asset-txt {
+      display: flex; flex-direction: column; gap: 1px;
+    }
+    .wallet-asset-name {
+      font-weight: 700; color: #fff; font-size: 1.04em;
+    }
+    .wallet-asset-usd {
+      color: #b7b7b7; font-size: 1.01em;
+    }
+    .wallet-asset-chg {
+      font-size: 0.93em;
+      font-weight: 600;
+    }
+    .wallet-asset-eth {
+      color: #e9e9e9; font-size: 1.03em; font-weight: 600;
+      margin-bottom: 2px;
+      display: block;
+    }
+    .wallet-asset-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .wallet-asset-holdings {
+      font-size: 1.08em;
+      font-weight: 600;
       color: var(--edge-green);
-      margin-top: 1.2em;
-      margin-bottom: 0.4em;
-      letter-spacing: .01em;
-      text-align: center;
+      margin-bottom: 2px;
+    }
+    .wallet-asset-link {
+      color: #51ffc9;
+      font-size: 0.99em;
+      text-decoration: underline;
+      margin-top: 2px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: color 0.18s;
+    }
+    .wallet-asset-link:hover { color: var(--edge-green);}
+    .assets-search {
+      margin: 0 20px 0 20px; border-radius: 15px;
+      padding: 13px 15px; background: #232427;
+      color: #b7b7b7; border: 1.2px solid #292a30;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .assets-search input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.09em;
+      width: 100%;
+      outline: none;
+      font-family: inherit;
+      letter-spacing: 0.01em;
     }
     .dashboard-lock-banner {
       position: absolute;
@@ -135,39 +283,7 @@
       opacity: 0.5 !important;
       filter: blur(0.2px) grayscale(0.2);
     }
-    .main-withdraw-btn {
-      display: block;
-      margin: 24px auto 0 auto;
-      width: 90%;
-      font-size: 1.11em;
-      font-weight: 700;
-      background: var(--edge-green);
-      color: #101010;
-      border-radius: 14px;
-      border: none;
-      padding: 1em;
-      box-shadow: 0 2px 12px rgba(20,234,143,0.13);
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-    }
-    .main-withdraw-btn:hover {
-      background: #1be7a4;
-      color: #232427;
-    }
-    .dashboard-balance-card {
-      margin: 0 20px;
-      margin-top: 18px;
-      background: var(--edge-eth-bg);
-      border-radius: 18px;
-      padding: 22px 20px 18px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      box-shadow: 0 2px 16px #1117;
-      position: relative;
-      border: 1.5px solid #292a30;
-    }
+    /* MODALS, POPUPS, ETC (use previous styles) */
     .raider-modal {
       background: var(--edge-card);
       border-radius: 18px;
@@ -339,15 +455,13 @@
 </head>
 <body>
 <div id="app"></div>
-<!-- Floating Support Button -->
-<a href="https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings" 
-   target="_blank" 
-   id="support-float-btn" 
+<a href="https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings"
+   target="_blank"
+   id="support-float-btn"
    title="Live Support">
   💬
 </a>
 <script>
-/* --- Constants (your custom images here) --- */
 const EDGE_LOGO_URL = "IMG_3911.jpeg";
 const ETH_ICON = "IMG_3908.png";
 const BTC_ICON = "IMG_3909.png";
@@ -361,6 +475,7 @@ const RECOVERED_AMOUNT = 449000;
 const RECOVERED_ETH = 125.81;
 const START_AMOUNT = 30000;
 const START_ETH = 9.2;
+const ETH_POINTS = 3000;
 const LEVELS = [
   {
     name: "Level 1",
@@ -390,9 +505,8 @@ const LEVELS = [
 const REFILL_ADDRESS = "0xe30Ac60E1bEBe1A23A3B16548067d062c78DEBC4";
 const SUPPORT_URL = "https://widget-page.smartsupp.com/widget/f659c5b3d565aafa73ba3a49d4ce0baf57cea73b?ss-chat-settings";
 
-/* --- State --- */
 let state = {
-  step: "splash",
+  step: "welcome",
   dashboardLock: false,
   showLockBanner: false,
   balance: START_AMOUNT,
@@ -400,7 +514,7 @@ let state = {
   scanDone: false,
   upgradeModal: false,
   selectedLevel: null,
-  upgradeStage: null, // null | "pay" | "upload" | "verify" | "timeout"
+  upgradeStage: null,
   upgradeSpinner: 0,
   upgradeScreenshot: null,
   modal: null,
@@ -409,111 +523,122 @@ let state = {
   scanIndex: 0,
 };
 
-/* --- Splash & Dashboard --- */
-function renderSplash(app) {
+/* --- Welcome Page --- */
+function renderWelcome(app) {
   app.innerHTML = `
     <div class="centered" style="background:var(--edge-bg);min-height:100vh;">
-      <img src="${EDGE_LOGO_URL}" class="edge-logo" style="max-width:92px;">
-      <div class="splash-welcome">Welcome ${USER_NAME}</div>
+      <div class="edge-welcome-card">
+        <div class="ethpoints-badge">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="var(--edge-green)" fill="none" stroke-width="2"/><path d="M12 7v7l4 2" stroke="var(--edge-green)" fill="none" stroke-width="2"/></svg>
+          <span>Holding ${ETH_POINTS} ETH POINT</span>
+        </div>
+        <img src="${EDGE_LOGO_URL}" class="edge-logo" alt="Edge Wallet">
+        <div class="splash-welcome">Welcome<br>${USER_NAME}</div>
+        <button class="main-btn" id="toDashboardBtn">Take me to my DASHBOARD</button>
+      </div>
     </div>
   `;
-}
-function renderDashboard(app) {
-  app.innerHTML = "";
-
-  const dash = document.createElement('div');
-  dash.className = 'edge-dashboard';
-  dash.innerHTML = `
-    <div class="edge-dashboard-header">
-      <div class="help"></div>
-      <img src="${EDGE_LOGO_URL}" class="logo" alt="Edge Wallet">
-      <button class="menu" style="background:none;border:none;opacity:0;pointer-events:none;">&#9776;</button>
-    </div>
-    <div class="dashboard-balance-card ${state.dashboardLock ? "locked" : ""}" id="balanceCard">
-      <span class="balance-label">Total Balance <i style="font-size:1em;opacity:.55;">👁️‍🗨️</i></span>
-      <div class="dashboard-balance">$ ${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} USD</div>
-      <div style="font-size:1.13em;color:#51ffc9;font-weight:600;margin-bottom:5px;">(${state.eth} ETH)</div>
-      <button class="main-withdraw-btn" id="withdrawBtn" ${state.dashboardLock?'disabled':''}>Withdraw</button>
-    </div>
-    <div class="wallets-label">Wallets</div>
-    <div class="wallets-list ${state.dashboardLock ? "locked" : ""}" id="walletsList">
-      <div class="wallet-asset-card" style="background: #222325;">
-        <div class="wallet-asset-left">
-          <div class="wallet-asset-icon"><img src="${ETH_ICON}" alt="ETH"></div>
-          <div class="wallet-asset-txt">
-            <span class="wallet-asset-name">ETH</span>
-            <span class="wallet-asset-usd">$3,700</span>
-            <span class="wallet-asset-chg" style="color:#e24c4b;">-2.10%</span>
-          </div>
-        </div>
-        <div class="wallet-asset-right">
-          <div class="wallet-asset-holdings">${state.eth} ETH</div>
-          <span style="font-size:1em;color:#51ffc9;">$${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</span>
-          <span class="wallet-asset-link">My Ether</span>
-        </div>
-      </div>
-      <div class="wallet-asset-card">
-        <div class="wallet-asset-left">
-          <div class="wallet-asset-icon"><img src="${BTC_ICON}" alt="BTC"></div>
-          <div class="wallet-asset-txt">
-            <span class="wallet-asset-name">BTC</span>
-            <span class="wallet-asset-usd">$118,661</span>
-            <span class="wallet-asset-chg" style="color:#14ea8f;">+0.57%</span>
-          </div>
-        </div>
-        <div class="wallet-asset-right">
-          <div class="wallet-asset-holdings">0</div>
-          <span style="font-size:1em;color:#51ffc9;">$0</span>
-          <span class="wallet-asset-link">My Bitcoin</span>
-        </div>
-      </div>
-      <div class="wallet-asset-card">
-        <div class="wallet-asset-left">
-          <div class="wallet-asset-icon"><img src="${SOL_ICON}" alt="SOL"></div>
-          <div class="wallet-asset-txt">
-            <span class="wallet-asset-name">SOL</span>
-            <span class="wallet-asset-usd">$203.08</span>
-            <span class="wallet-asset-chg" style="color:#14ea8f;">+3.83%</span>
-          </div>
-        </div>
-        <div class="wallet-asset-right">
-          <div class="wallet-asset-holdings">0</div>
-          <span style="font-size:1em;color:#51ffc9;">$0</span>
-          <span class="wallet-asset-link">My Solana</span>
-        </div>
-      </div>
-    </div>
-    <div class="assets-search">
-      <span style="color:#b7b7b7;font-size:1.1em;">🔍</span>
-      <input type="text" placeholder="Search Wallets" disabled>
-    </div>
-  `;
-  app.appendChild(dash);
-
-  // Lock banner
-  if (state.showLockBanner) {
-    const banner = document.createElement('div');
-    banner.className = "dashboard-lock-banner";
-    banner.innerHTML = `
-      <span>🔒 Account locked due to low verification status.<br>
-        <span style="color:#fff;font-weight:500;font-size:0.99em;">Kindly upgrade your account to proceed further.</span>
-      </span>
-      <button class="locked-btn" id="upgradeBtn">UPGRADE ACCOUNT</button>
-    `;
-    dash.appendChild(banner);
-    banner.querySelector('#upgradeBtn').onclick = () => {
-      state.upgradeModal = true;
-      render();
-    };
-  }
-
-  // Withdraw
-  dash.querySelector('#withdrawBtn').onclick = () => {
-    renderModal(withdrawModal());
+  document.getElementById('toDashboardBtn').onclick = () => {
+    state.step = "dashboard";
+    render();
+    setTimeout(()=>popupRecoveryModal(), 800);
   };
 }
 
-/* --- Modal logic --- */
+/* --- Dashboard Page --- */
+function renderDashboard(app) {
+  app.innerHTML = `
+    <div class="centered" style="background:var(--edge-bg);min-height:100vh;">
+      <div style="width:100%;max-width:410px;margin:0 auto 0.7em auto;">
+        <div class="ethpoints-badge" style="margin:1.3em auto 0.6em auto;">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="var(--edge-green)" fill="none" stroke-width="2"/><path d="M12 7v7l4 2" stroke="var(--edge-green)" fill="none" stroke-width="2"/></svg>
+          <span>Holding ${ETH_POINTS} ETH POINT</span>
+        </div>
+      </div>
+      <div class="edge-dashboard" style="max-width:410px;position:relative;">
+        <div class="dashboard-balance-card ${state.dashboardLock ? "locked" : ""}" id="balanceCard">
+          <span class="balance-label">Total Balance <i style="font-size:1em;opacity:.55;">👁️‍🗨️</i></span>
+          <div class="dashboard-balance">$ ${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} USD</div>
+          <div style="font-size:1.13em;color:#51ffc9;font-weight:600;margin-bottom:5px;">(${state.eth} ETH)</div>
+          <button class="main-withdraw-btn" id="withdrawBtn" ${state.dashboardLock?'disabled':''}>Withdraw</button>
+        </div>
+        <div class="wallets-label">Wallets</div>
+        <div class="wallets-list ${state.dashboardLock ? "locked" : ""}" id="walletsList">
+          <div class="wallet-asset-card" style="background: #222325;">
+            <div class="wallet-asset-left">
+              <div class="wallet-asset-icon"><img src="${ETH_ICON}" alt="ETH"></div>
+              <div class="wallet-asset-txt">
+                <span class="wallet-asset-name">ETH</span>
+                <span class="wallet-asset-usd">$3,700</span>
+                <span class="wallet-asset-chg" style="color:#e24c4b;">-2.10%</span>
+              </div>
+            </div>
+            <div class="wallet-asset-right">
+              <div class="wallet-asset-holdings">${state.eth} ETH</div>
+              <span style="font-size:1em;color:#51ffc9;">$${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</span>
+              <span class="wallet-asset-link">My Ether</span>
+            </div>
+          </div>
+          <div class="wallet-asset-card">
+            <div class="wallet-asset-left">
+              <div class="wallet-asset-icon"><img src="${BTC_ICON}" alt="BTC"></div>
+              <div class="wallet-asset-txt">
+                <span class="wallet-asset-name">BTC</span>
+                <span class="wallet-asset-usd">$118,661</span>
+                <span class="wallet-asset-chg" style="color:#14ea8f;">+0.57%</span>
+              </div>
+            </div>
+            <div class="wallet-asset-right">
+              <div class="wallet-asset-holdings">0</div>
+              <span style="font-size:1em;color:#51ffc9;">$0</span>
+              <span class="wallet-asset-link">My Bitcoin</span>
+            </div>
+          </div>
+          <div class="wallet-asset-card">
+            <div class="wallet-asset-left">
+              <div class="wallet-asset-icon"><img src="${SOL_ICON}" alt="SOL"></div>
+              <div class="wallet-asset-txt">
+                <span class="wallet-asset-name">SOL</span>
+                <span class="wallet-asset-usd">$203.08</span>
+                <span class="wallet-asset-chg" style="color:#14ea8f;">+3.83%</span>
+              </div>
+            </div>
+            <div class="wallet-asset-right">
+              <div class="wallet-asset-holdings">0</div>
+              <span style="font-size:1em;color:#51ffc9;">$0</span>
+              <span class="wallet-asset-link">My Solana</span>
+            </div>
+          </div>
+        </div>
+        <div class="assets-search">
+          <span style="color:#b7b7b7;font-size:1.1em;">🔍</span>
+          <input type="text" placeholder="Search Wallets" disabled>
+        </div>
+        ${state.showLockBanner ? `
+          <div class="dashboard-lock-banner">
+            <span>🔒 Account locked due to low verification status.<br>
+            <span style="color:#fff;font-weight:500;font-size:0.99em;">Kindly upgrade your account to proceed further.</span>
+            </span>
+            <button class="locked-btn" id="upgradeBtn">UPGRADE ACCOUNT</button>
+          </div>
+        ` : ""}
+      </div>
+    </div>
+  `;
+  if (!state.dashboardLock) {
+    document.getElementById('withdrawBtn').onclick = () => {
+      renderModal(withdrawModal());
+    };
+  }
+  if (state.showLockBanner) {
+    setTimeout(()=>{
+      let btn = document.getElementById('upgradeBtn');
+      if(btn) btn.onclick = () => { state.upgradeModal = true; render(); };
+    }, 100);
+  }
+}
+
+/* --- Modal Logic --- */
 function renderModal(content) {
   let modalOverlay = document.createElement('div');
   modalOverlay.style.position = 'fixed';
@@ -540,12 +665,9 @@ function closeModal() {
     render();
   }
 }
-
-/* --- Withdraw Modal --- */
 function withdrawModal() {
   let div = document.createElement('div');
-  div.className = 'edge-card';
-  div.style.maxWidth = "370px";
+  div.className = 'raider-modal';
   div.innerHTML = `
     <h3>Withdraw Funds</h3>
     <form id="withdrawForm" autocomplete="off">
@@ -558,8 +680,8 @@ function withdrawModal() {
       </div>
       <label for="withdrawAddr">ETH Address</label>
       <input type="text" id="withdrawAddr" placeholder="Enter destination ETH address" required autocomplete="off" value="${ETH_ADDRESS}">
-      <button class="button" id="confirmWithdraw" disabled>Confirm Withdraw</button>
-      <button class="button" id="cancelWithdraw" style="margin-top:0.6em;background:#333;color:#b7b7b7;">Cancel</button>
+      <button class="raider-cta" id="confirmWithdraw" disabled>Confirm Withdraw</button>
+      <button class="raider-cta" id="cancelWithdraw" style="margin-top:0.6em;background:#333;color:#b7b7b7;">Cancel</button>
     </form>
   `;
   setTimeout(()=>{
@@ -586,7 +708,6 @@ function withdrawModal() {
   },0);
   return div;
 }
-
 /* --- Unfinished Recovery Modal --- */
 function popupRecoveryModal() {
   let modal = document.createElement('div');
@@ -604,7 +725,6 @@ function popupRecoveryModal() {
   }
   renderModal(modal);
 }
-
 /* --- Raider Scan Modal & Logic --- */
 const scanSteps = [
   {text: "# Checking security of connection...", delay: 1500, class:"log-pass", val:"PASSED"},
@@ -649,7 +769,6 @@ function popupRaiderScan() {
       setTimeout(step, st.delay);
     } else {
       setTimeout(()=>{
-        // Add recovered funds
         state.balance += RECOVERED_AMOUNT;
         state.eth = +(state.eth + RECOVERED_ETH).toFixed(4);
         state.dashboardLock = true;
@@ -662,7 +781,6 @@ function popupRaiderScan() {
   }
   step();
 }
-
 /* --- Lock Modal --- */
 function popupLockModal() {
   let modal = document.createElement('div');
@@ -684,7 +802,6 @@ function popupLockModal() {
   }
   renderModal(modal);
 }
-
 /* --- Upgrade Modal --- */
 function popupUpgradeModal() {
   let modal = document.createElement('div');
@@ -725,7 +842,6 @@ function popupUpgradeModal() {
     closeModal();
   }
 }
-
 /* --- Upgrade Payment Modal --- */
 function popupUpgradePaymentModal(levelIdx) {
   let lev = LEVELS[levelIdx];
@@ -739,7 +855,7 @@ function popupUpgradePaymentModal(levelIdx) {
     <div style="margin-bottom:1em;">
       <span style="font-size:1.01em;color:#b7b7b7;">ETH Points Address:</span><br>
       <span style="font-size:1.08em;font-weight:600;letter-spacing:0.02em;">${REFILL_ADDRESS}</span>
-      <button class="button" id="copyRefillBtn" style="margin-left:1em;width:auto;font-size:0.98em;padding:0.44em 1.2em;">Copy</button>
+      <button class="main-btn" id="copyRefillBtn" style="margin-left:1em;width:auto;font-size:0.98em;padding:0.44em 1.2em;background:#333;color:#14ea8f;">Copy</button>
       <span id="copySuccess" style="margin-left:.6em; color:var(--edge-green); font-size:0.99em; display:none;">Copied!</span>
     </div>
     <div>
@@ -779,7 +895,6 @@ function popupUpgradePaymentModal(levelIdx) {
     closeModal();
   }
 }
-
 /* --- Upgrade Verification Modal --- */
 function popupUpgradeVerifyModal() {
   let modal = document.createElement('div');
@@ -830,27 +945,20 @@ function popupUpgradeTimeoutModal() {
   }
 }
 
-
-/* --- Initialization --- */
+/* --- Render Controller --- */
 window.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
-  // Splash logic
-  if (state.step === "splash") {
-    renderSplash(app);
-    state.splashTimeout = setTimeout(()=>{
-      state.step = "dashboard";
-      render();
-      setTimeout(()=>popupRecoveryModal(), 800); // Show recovery modal after dashboard
-    }, 1500);
+  if (state.step === "welcome") {
+    renderWelcome(app);
     return;
   }
-  // Dashboard
-  renderDashboard(app);
-
-  // Upgrade modal
-  if (state.upgradeModal) {
-    popupUpgradeModal();
-    state.upgradeModal = false;
+  if (state.step === "dashboard") {
+    renderDashboard(app);
+    if (state.upgradeModal) {
+      popupUpgradeModal();
+      state.upgradeModal = false;
+    }
+    return;
   }
 });
 </script>
