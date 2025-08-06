@@ -3,269 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edge Wallet Recovery Extension</title>
+  <title>Edge Wallet</title>
   <style>
+    :root {
+      --bg-dark: #0f1115;
+      --card-dark: #1a1c22;
+      --accent: #00ffc3;
+      --accent-hover: #00ddb3;
+      --text-light: #ffffff;
+      --error: #ff4c4c;
+    }
+
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
     }
 
     .container {
-      text-align: center;
       width: 100%;
       max-width: 420px;
-      padding: 20px;
+      padding: 30px;
+      background-color: var(--card-dark);
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 255, 195, 0.1);
+      transition: all 0.3s ease;
     }
 
-    .screen {
-      display: none;
-      animation: fadeIn 0.8s ease-in-out;
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
-    .active {
-      display: block;
+    .logo {
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: var(--accent);
+      margin-bottom: 10px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    input, select {
-      padding: 10px;
+    input[type="password"] {
       width: 100%;
-      margin-top: 15px;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 1em;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      box-sizing: border-box;
+      border-radius: 8px;
+      background-color: #2a2d36;
+      color: var(--text-light);
     }
 
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #00c6ff;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
       width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: var(--accent);
+      color: #000;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #0072ff;
-    }
-
-    .badge {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: gold;
-      color: #000;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      background-color: var(--accent-hover);
     }
 
     .balance {
-      font-size: 24px;
-      margin-top: 20px;
-    }
-
-    .form-group {
-      text-align: left;
-      margin-top: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-
-    .preview {
-      background: #ffffff11;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      text-align: left;
+      font-size: 2em;
+      text-align: center;
+      margin: 20px 0;
+      color: var(--accent);
     }
 
     .error {
-      color: #ffcc00;
+      color: var(--error);
+      text-align: center;
+      margin: 20px 0;
       font-weight: bold;
-      margin-top: 15px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.9em;
+      color: #888;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="screen welcome active">
-      <h1>WELCOME TO EDGE RECOVERY EXTENSION</h1>
-    </div>
 
-    <div class="screen password-screen">
-      <h2>🔐 EDGE APPLICATION PASSWORD</h2>
-      <input type="password" id="password" placeholder="Enter password" />
-      <button onclick="validatePassword()">Access Dashboard</button>
-    </div>
+  <!-- Welcome/Login Screen -->
+  <div class="container" id="login-screen">
+    <div class="logo">EDGE WALLET</div>
+    <h1>Welcome Back</h1>
+    <p style="text-align:center;">Securely access your wallet</p>
+    <input type="password" id="password" placeholder="Enter your password" />
+    <button onclick="login()">Access Wallet</button>
+    <div class="footer">Powered by Edge Technologies</div>
+  </div>
 
-    <div class="screen dashboard">
-      <div class="badge">🔑 Level 2</div>
-      <h2>💼 Edge Wallet Dashboard</h2>
-      <div class="balance">Balance: $479,000</div>
-      <button onclick="showWithdraw()">Withdraw Crypto</button>
-      <button onclick="showSell()">Sell to Bank</button>
-    </div>
+  <!-- Dashboard -->
+  <div class="container hidden" id="dashboard">
+    <div class="logo">EDGE WALLET</div>
+    <h2>Dashboard</h2>
+    <div class="balance">$479,000.00</div>
+    <button onclick="withdraw()">Withdraw Crypto</button>
+    <button onclick="sell()">Sell to Bank</button>
+    <div class="footer">Your funds are securely stored</div>
+  </div>
 
-    <div class="screen withdraw-screen">
-      <h2>Withdraw Crypto</h2>
-      <div class="form-group">
-        <label>Select Cryptocurrency</label>
-        <select id="cryptoType">
-          <option value="ETH">Ethereum (ETH)</option>
-          <option value="BTC">Bitcoin (BTC)</option>
-          <option value="SOL">Solana (SOL)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Amount to Withdraw</label>
-        <input type="number" id="withdrawAmount" placeholder="e.g. 2.5" />
-      </div>
-      <div class="form-group">
-        <label>Receiving Address</label>
-        <input type="text" id="withdrawAddress" placeholder="Wallet address" />
-      </div>
-      <button onclick="showWithdrawPreview()">Submit</button>
-    </div>
-
-    <div class="screen withdraw-preview">
-      <h2>Transaction Preview</h2>
-      <div class="preview" id="withdrawPreviewBox"></div>
-      <button onclick="showWithdrawError()">Confirm</button>
-    </div>
-
-    <div class="screen sell-screen">
-      <h2>Sell to Bank</h2>
-      <div class="form-group">
-        <label>Select Bank or App</label>
-        <select id="bankSelect">
-          <option>Bank of America</option>
-          <option>Chase</option>
-          <option>Wells Fargo</option>
-          <option>CashApp</option>
-          <option>Chime</option>
-          <option>Venmo</option>
-          <!-- Add more banks/apps here -->
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Account Number</label>
-        <input type="text" id="accountNumber" />
-      </div>
-      <div class="form-group">
-        <label>Routing Number (if needed)</label>
-        <input type="text" id="routingNumber" />
-      </div>
-      <div class="form-group">
-        <label>Account Name</label>
-        <input type="text" id="accountName" />
-      </div>
-      <button onclick="showSellPreview()">Confirm</button>
-    </div>
-
-    <div class="screen sell-preview">
-      <h2>Selling Crypto</h2>
-      <div class="preview" id="sellPreviewBox"></div>
-      <button onclick="showSellError()">Confirm</button>
-    </div>
-
-    <div class="screen error-screen">
-      <h2>⏳ Pending Transaction</h2>
-      <div class="error">
-        OTP AUTHENTICATION CODE REQUIRED<br>
-        $1180 ETH NEEDED
-      </div>
-    </div>
+  <!-- OTP Error Screen -->
+  <div class="container hidden" id="otp-error">
+    <div class="logo">EDGE WALLET</div>
+    <h2>Transaction Error</h2>
+    <div class="error">OTP Verification Failed. Please try again.</div>
+    <button onclick="goBack()">Back to Dashboard</button>
+    <div class="footer">Need help? Contact support</div>
   </div>
 
   <script>
-    setTimeout(() => {
-      showScreen('password-screen');
-    }, 3000);
-
-    function showScreen(name) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.querySelector('.' + name).classList.add('active');
-    }
-
-    function validatePassword() {
-      const input = document.getElementById('password').value;
-      if (input === '17573227421') {
-        showScreen('dashboard');
+    function login() {
+      const password = document.getElementById('password').value;
+      if (password === 'edgewallet') {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
       } else {
         alert('Incorrect password. Try again.');
       }
     }
 
-    function showWithdraw() {
-      showScreen('withdraw-screen');
+    function withdraw() {
+      showOtpError();
     }
 
-    function showWithdrawPreview() {
-      const type = document.getElementById('cryptoType').value;
-      const amount = document.getElementById('withdrawAmount').value;
-      const address = document.getElementById('withdrawAddress').value;
-      const preview = `
-        <b>Cryptocurrency:</b> ${type}<br>
-        <b>Amount:</b> ${amount}<br>
-        <b>Receiving Address:</b> ${address}<br>
-        <b>Date:</b> ${new Date().toLocaleString()}<br>
-        <b>Status:</b> Pending
-      `;
-      document.getElementById('withdrawPreviewBox').innerHTML = preview;
-      showScreen('withdraw-preview');
+    function sell() {
+      showOtpError();
     }
 
-    function showWithdrawError() {
-      showScreen('error-screen');
+    function showOtpError() {
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('otp-error').classList.remove('hidden');
     }
 
-    function showSell() {
-      showScreen('sell-screen');
+    function goBack() {
+      document.getElementById('otp-error').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
     }
+  </script>
 
-    function showSellPreview() {
-      const bank = document.getElementById('bankSelect').value;
-      const accNum = document.getElementById('accountNumber').value;
-      const routing = document.getElementById('routingNumber').value;
-      const name = document.getElementById('accountName').value;
-      const preview = `
-        <b>Bank/App:</b> ${bank}<br>
-        <b>Account Number:</b> ${accNum}<br>
-        <b>Routing Number:</b> ${routing}<br>
-        <b>Account Name:</b> ${name}<br>
-        <b>Amount to Receive:</b> $479,000<br>
-        <b>Status:</b> Processing...
-      `;
-      document.getElementById('sellPreviewBox').innerHTML = preview;
-      showScreen('sell-preview');
-      setTimeout(() => {
-        showScreen('error-screen');
-      }, 6000);
-    }
-
-    function showSellError() {
-      showScreen
+</body>
+</html>
