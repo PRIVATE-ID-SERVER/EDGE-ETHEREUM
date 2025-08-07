@@ -311,7 +311,6 @@
     .assets-wallet-label { color: #fff; font-weight: 500; font-size: 1.09em; margin-right: 6px;}
     .assets-wallet-arrow { color: var(--edge-green); font-size: 1.13em; margin-left: 6px;}
     .assets-wallet-addr { color: #b7b7b7; font-size: 0.99em; word-break: break-all; }
-    /* Responsive */
     @media (max-width: 500px) {
       .dashboard-header-row, .dashboard-balance-card, .dashboard-grid-row, .assets-header-row, .assets-title-row, .assets-balance-row, .assets-receive-card { max-width: 99vw; }
       .dashboard-bg, .assets-bg { padding-bottom: 80px;}
@@ -324,13 +323,15 @@
 <div id="app"></div>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script>
-  // Demo images/icons
-  const EDGE_LOGO SRC = "IMG_3926.png"; // Use your logo
+  // Images (files must be in the same folder as your HTML!)
+  const EDGE_LOGO_URL = "IMG_3926.png"; // Edge logo
+  const ETH_ICON_URL = "IMG_3908.png"; // ETH logo
+
+  // Face ID SVG
   const FACE_ID_ICON = `<svg width="38" height="38" viewBox="0 0 48 48" fill="none"><rect x="10" y="22" width="28" height="14" rx="7" stroke="#14ea8f" stroke-width="2"/><rect x="4" y="4" width="40" height="40" rx="8" stroke="#14ea8f" stroke-width="2"/><circle cx="24" cy="29" r="3" fill="#14ea8f"/><rect x="17" y="16" width="14" height="2" rx="1" fill="#14ea8f"/></svg>`;
-  const ETH_ICON SRC = "IMG_3908.png";`<svg width="29" height="29" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#18191d"/><path d="M16 6L22.5 16.5L16 28L9.5 16.5L16 6Z" fill="#14ea8f"/></svg>`;
-  // App state
+
   let state = {
-    step: 'splash', // splash | pin | dashboard | withdraw | withdrawPreview | withdrawPending | sell | sellDetails | sellPreview | sellPending | assets
+    step: 'splash',
     pin: '', pinError: '', username: 'flye777', correctPin: '5431',
     balance: 479000.85, eth: 125.81, walletAddr: '0x1fD831934C8763C33F864989968D87CF81713055',
     withdraw: { crypto: null, amount: '', address: '', txTime: null, preview: false, pending: false },
@@ -366,7 +367,6 @@
     setTimeout(() => { state.step = 'pin'; render(); }, 3000);
   }
   function renderPin(app) {
-    // PIN entry interface, visually matching your screenshot
     const container = document.createElement('div');
     container.className = 'pin-container';
     // Header
@@ -435,7 +435,6 @@
     app.appendChild(container);
   }
   function renderDashboard(app) {
-    // Dashboard main interface, cloned from your screenshot
     const dashBg = document.createElement('div'); dashBg.className = 'dashboard-bg';
     // Header row
     const headerRow = document.createElement('div'); headerRow.className = 'dashboard-header-row';
@@ -491,7 +490,6 @@
     </div>`;
     dashBg.appendChild(navRow);
     app.appendChild(dashBg);
-    // Event handlers
     setTimeout(() => {
       document.getElementById('withdrawBtn').onclick = () => { state.withdraw = {crypto: null, amount: '', address: '', txTime: null, preview: false, pending: false}; state.step = 'withdraw'; render(); };
       document.getElementById('sellBtn').onclick = () => { state.sell = {bank: null, account: '', routing: '', name: '', amount: '', preview: false, pending: false}; state.step = 'sell'; render(); };
@@ -501,7 +499,6 @@
     }, 20);
   }
   function renderWithdrawModal(app) {
-    // Withdraw flow: select crypto, input amount/address
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -532,7 +529,6 @@
     modal.querySelector('#withdrawCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
   }
   function renderWithdrawPreview(app) {
-    // Show transaction preview before "pending"
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -554,7 +550,6 @@
     modal.querySelector('#withdrawCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
   }
   function renderWithdrawPending(app) {
-    // Pending transaction, then OTP error
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -584,7 +579,6 @@
     }, 2100);
   }
   function renderSellModal(app) {
-    // Sell to bank: select bank/app
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -609,7 +603,6 @@
     modal.querySelector('#sellCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
   }
   function renderSellDetailsModal(app) {
-    // Sell: input account info
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -636,7 +629,6 @@
     modal.querySelector('#sellCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
   }
   function renderSellPreview(app) {
-    // Show preview before processing
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -659,7 +651,6 @@
     modal.querySelector('#sellCancelBtn').onclick = () => { state.step = 'dashboard'; render(); };
   }
   function renderSellPending(app) {
-    // Processing for 6s, then show OTP error
     const modal = document.createElement('div');
     modal.className = 'popup-modal';
     modal.innerHTML = `
@@ -689,7 +680,6 @@
     }, 6000);
   }
   function renderAssets(app) {
-    // Assets screen, cloned from your image
     const assetsBg = document.createElement('div'); assetsBg.className = 'assets-bg';
     // Header
     const headerRow = document.createElement('div'); headerRow.className = 'assets-header-row';
@@ -712,7 +702,7 @@
     const receiveCard = document.createElement('div'); receiveCard.className = 'assets-receive-card';
     receiveCard.innerHTML = `
       <div class="assets-receive-row">
-        <div class="assets-receive-icon">${ETH_ICON}</div>
+        <div class="assets-receive-icon"><img src="${ETH_ICON_URL}" alt="ETH" style="width:29px;height:29px;border-radius:50%;background:#18191d;"></div>
         <div class="assets-receive-title">Receive to My Ether <span class="assets-edit-arrow">→</span></div>
       </div>
       <div class="assets-edit-row">
@@ -741,7 +731,6 @@
     </div>`;
     assetsBg.appendChild(navRow);
     app.appendChild(assetsBg);
-    // QR code
     setTimeout(() => {
       let qr = new QRious({element: document.getElementById('assetsQrImg'), value: state.walletAddr, size:200});
       document.getElementById('assetsEditInput').oninput = e => { state.assets.editAmt = e.target.value; render(); };
